@@ -9,6 +9,9 @@
     <!-- Leaflet CSS for Maps -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <link href="/css/style.css" rel="stylesheet">
+    <!-- GSAP Animation Library for Ultra-Realistic Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -123,7 +126,7 @@
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="card h-100 feature-card">
                     <div class="card-body text-center">
-                        <i class="fas fa-map-marked-alt fa-3x mb-3" style="color: var(--railway-orange);"></i>
+                        <i class="fas fa-map-marked-alt fa-3x mb-3" style="color: var(--accent-color);"></i>
                         <h5 class="card-title">Live Indian Railway Map</h5>
                         <p class="card-text">
                             Interactive map focused exclusively on Indian Railway network 
@@ -135,7 +138,7 @@
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="card h-100 feature-card">
                     <div class="card-body text-center">
-                        <i class="fas fa-route fa-3x mb-3" style="color: var(--success-color);"></i>
+                        <i class="fas fa-route fa-3x mb-3" style="color: var(--secondary-color);"></i>
                         <h5 class="card-title">Route Management</h5>
                         <p class="card-text">
                             Comprehensive route planning and management system for 
@@ -147,7 +150,7 @@
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="card h-100 feature-card">
                     <div class="card-body text-center">
-                        <i class="fas fa-cogs fa-3x mb-3" style="color: var(--info-color);"></i>
+                        <i class="fas fa-cogs fa-3x mb-3" style="color: var(--primary-color);"></i>
                         <h5 class="card-title">Smart Operations</h5>
                         <p class="card-text">
                             Advanced operational management with real-time monitoring, 
@@ -299,6 +302,8 @@
     <!-- Railway Map Component -->
     <script src="/js/railway-map.js"></script>
     <script src="/js/main.js"></script>
+    <!-- Ultra-Realistic GSAP Animations -->
+    <script src="/js/animations.js"></script>
     
     <script>
         // Global railway map instance
