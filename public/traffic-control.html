@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Traffic Control Center - IRTOMS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <style>
+        .control-panel {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            margin-bottom: 20px;
+        }
+        
+        .ai-recommendation {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            border-radius: 10px;
+            padding: 15px;
+            color: white;
+            margin: 10px 0;
+        }
+        
+        .conflict-alert {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            border-radius: 10px;
+            padding: 15px;
+            color: white;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        
+        .train-marker {
+            position: absolute;
+            background: #007bff;
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+            z-index: 10;
+            cursor: pointer;
+        }
+        
+        .train-marker.vip { background: #dc3545; }
+        .train-marker.express { background: #28a745; }
+        .train-marker.freight { background: #6c757d; }
+        
+        .section-map {
+            position: relative;
+            background: linear-gradient(45deg, #f0f2f5, #e9ecef);
+            border-radius: 10px;
+            height: 400px;
+            overflow: hidden;
+        }
+        
+        .performance-gauge {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            position: relative;
+        }
+        
+        .gauge-excellent { background: conic-gradient(#28a745 0deg 315deg, #e9ecef 315deg 360deg); }
+        .gauge-good { background: conic-gradient(#17a2b8 0deg 270deg, #e9ecef 270deg 360deg); }
+        .gauge-fair { background: conic-gradient(#ffc107 0deg 180deg, #e9ecef 180deg 360deg); }
+        .gauge-poor { background: conic-gradient(#dc3545 0deg 90deg, #e9ecef 90deg 360deg); }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <div class="theme-toggle" onclick="toggleTheme()" title="Switch Theme">
+        <i class="fas fa-moon" id="theme-icon"></i>
+    </div>
+    
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-traffic-light"></i>
+                AI-Powered Traffic Control Center
+            </a>
+            
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text me-3">
+                    <i class="fas fa-user-shield"></i>
+                    <span id="controllerName">Traffic Controller</span>
+                </span>
+                <button class="btn btn-outline-light btn-sm" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-3">
+        <!-- AI Control Panel -->
+        <div class="row">
+            <div class="col-12">
+                <div class="control-panel">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h4><i class="fas fa-brain"></i> AI Traffic Optimization Engine</h4>
+                            <p class="mb-0">
+                                Real-time decision support powered by advanced algorithms
+                                <span class="badge bg-success ms-2" id="aiStatus">ACTIVE</span>
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <button class="btn btn-light me-2" onclick="triggerOptimization()">
+                                <i class="fas fa-cogs"></i> Optimize Sections
+                            </button>
+                            <button class="btn btn-outline-light" onclick="showScenarioAnalysis()">
+                                <i class="fas fa-flask"></i> What-if Analysis
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real-time Alerts and Recommendations -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-exclamation-triangle text-warning"></i> Active Conflicts</h5>
+                    </div>
+                    <div class="card-body" id="conflictsContainer">
+                        <!-- Conflicts will be loaded here -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-lightbulb text-success"></i> AI Recommendations</h5>
+                    </div>
+                    <div class="card-body" id="recommendationsContainer">
+                        <!-- AI recommendations will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Overview and Performance -->
+        <div class="row mb-4">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5><i class="fas fa-map"></i> Railway Section Overview</h5>
+                        <div>
+                            <select id="sectionSelector" class="form-select form-select-sm" onchange="switchSection()">
+                                <option value="SECT_001">Delhi-Mumbai Section A</option>
+                                <option value="SECT_002">Mumbai-Pune Section B</option>
+                                <option value="SECT_003">Chennai-Bangalore Corridor</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="section-map" id="sectionMap">
+                            <!-- Interactive section map will be rendered here -->
+                        </div>
+                        <div class="p-3">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <small class="text-muted">Active Trains</small>
+                                    <h4 id="activeTrainsCount">0</h4>
+                                </div>
+                                <div class="col-md-3">
+                                    <small class="text-muted">Section Capacity</small>
+                                    <h4 id="sectionCapacity">0%</h4>
+                                </div>
+                                <div class="col-md-3">
+                                    <small class="text-muted">Avg Speed</small>
+                                    <h4 id="avgSpeed">0 km/h</h4>
+                                </div>
+                                <div class="col-md-3">
+                                    <small class="text-muted">On-time Performance</small>
+                                    <h4 id="onTimePerf">0%</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-chart-pie"></i> System Performance</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <div class="performance-gauge gauge-excellent mx-auto">
+                                    <span id="throughputGauge">87%</span>
+                                </div>
+                                <small class="text-muted">Throughput</small>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <div class="performance-gauge gauge-good mx-auto">
+                                    <span id="punctualityGauge">94%</span>
+                                </div>
+                                <small class="text-muted">Punctuality</small>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="performance-gauge gauge-excellent mx-auto">
+                                    <span id="utilizationGauge">76%</span>
+                                </div>
+                                <small class="text-muted">Utilization</small>
+                            </div>
+                            <div class="col-6">
+                                <div class="performance-gauge gauge-fair mx-auto">
+                                    <span id="aiAccuracyGauge">91%</span>
+                                </div>
+                                <small class="text-muted">AI Accuracy</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Train Management and Control -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5><i class="fas fa-train"></i> Active Trains Management</h5>
+                        <div>
+                            <button class="btn btn-primary btn-sm me-2" onclick="showTrainDetails()">
+                                <i class="fas fa-info-circle"></i> Details
+                            </button>
+                            <button class="btn btn-warning btn-sm" onclick="reportDisruption()">
+                                <i class="fas fa-exclamation-triangle"></i> Report Disruption
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="trainsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Train</th>
+                                        <th>Type</th>
+                                        <th>Current Position</th>
+                                        <th>Speed</th>
+                                        <th>Status</th>
+                                        <th>Delay</th>
+                                        <th>Next Station</th>
+                                        <th>AI Recommendation</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Train data will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Analytics -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-chart-line"></i> Throughput Trend</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="throughputChart" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-clock"></i> Punctuality Analysis</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="punctualityChart" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Decision Modal -->
+    <div class="modal fade" id="decisionModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Controller Decision Required</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="ai-recommendation mb-3">
+                        <h6><i class="fas fa-robot"></i> AI Recommendation</h6>
+                        <p id="aiRecommendationText">Hold Train 12615 at current position to allow Train 12951 to pass.</p>
+                        <small>Confidence: <span id="aiConfidence">94%</span> | Expected benefit: <span id="expectedBenefit">3 min reduction in total delay</span></small>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="controllerDecision" class="form-label">Your Decision:</label>
+                        <select class="form-control" id="controllerDecision">
+                            <option value="ACCEPT">Accept AI Recommendation</option>
+                            <option value="OVERRIDE_PROCEED">Override - Allow train to proceed</option>
+                            <option value="OVERRIDE_HOLD">Override - Hold train longer</option>
+                            <option value="OVERRIDE_REROUTE">Override - Reroute train</option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-3" id="overrideReasonGroup" style="display: none;">
+                        <label for="overrideReason" class="form-label">Override Reason:</label>
+                        <textarea class="form-control" id="overrideReason" rows="3" placeholder="Please provide reason for overriding AI recommendation..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="submitDecision()">Submit Decision</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scenario Analysis Modal -->
+    <div class="modal fade" id="scenarioModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">What-if Scenario Analysis</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Scenario Configuration</h6>
+                            <div class="mb-3">
+                                <label class="form-label">Scenario Type:</label>
+                                <select class="form-control" id="scenarioType">
+                                    <option value="DELAY">Train Delay Scenario</option>
+                                    <option value="BREAKDOWN">Equipment Breakdown</option>
+                                    <option value="WEATHER">Weather Impact</option>
+                                    <option value="MAINTENANCE">Emergency Maintenance</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Affected Train/Section:</label>
+                                <input type="text" class="form-control" id="affectedEntity" placeholder="e.g., Train 12951 or Section A">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Impact Duration (minutes):</label>
+                                <input type="number" class="form-control" id="impactDuration" value="30">
+                            </div>
+                            <button class="btn btn-primary" onclick="runScenarioAnalysis()">
+                                <i class="fas fa-play"></i> Run Analysis
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Analysis Results</h6>
+                            <div id="scenarioResults">
+                                <p class="text-muted">Configure and run a scenario to see results...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/js/auth.js"></script>
+    
+    <script>
+        let currentSection = 'SECT_001';
+        let dashboardData = {};
+        let updateInterval;
+        let throughputChart, punctualityChart;
+        
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check authentication
+            if (!window.authManager.requireRole('admin') && !window.authManager.requireRole('staff')) {
+                return;
+            }
+            
+            // Set controller name
+            const user = window.authManager.getUser();
+            document.getElementById('controllerName').textContent = user.fullName || 'Traffic Controller';
+            
+            // Initialize dashboard components
+            initializeDashboard();
+            initializeCharts();
+            startRealTimeUpdates();
+            
+            // Setup event listeners
+            document.getElementById('controllerDecision').addEventListener('change', function(e) {
+                const overrideGroup = document.getElementById('overrideReasonGroup');
+                if (e.target.value !== 'ACCEPT') {
+                    overrideGroup.style.display = 'block';
+                } else {
+                    overrideGroup.style.display = 'none';
+                }
+            });
+        });
+        
+        async function initializeDashboard() {
+            try {
+                showLoading(true);
+                
+                // Load initial dashboard data
+                const response = await window.authManager.makeAuthenticatedRequest('/api/traffic-control/real-time-dashboard');
+                if (response) {
+                    dashboardData = await response.json();
+                    updateDashboard(dashboardData.data);
+                }
+                
+                // Load sections data
+                await loadSectionsData();
+                
+            } catch (error) {
+                console.error('Dashboard initialization error:', error);
+                showNotification('Failed to initialize dashboard', 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        async function loadSectionsData() {
+            try {
+                const response = await window.authManager.makeAuthenticatedRequest('/api/traffic-control/sections');
+                if (response) {
+                    const data = await response.json();
+                    updateSectionView(data.data.sections);
+                }
+            } catch (error) {
+                console.error('Failed to load sections:', error);
+            }
+        }
+        
+        function updateDashboard(data) {
+            // Update system status
+            if (data.systemStatus) {
+                updateSystemStatus(data.systemStatus);
+            }
+            
+            // Update performance metrics
+            if (data.performance) {
+                updatePerformanceMetrics(data.performance);
+            }
+            
+            // Update alerts and conflicts
+            if (data.upcomingConflicts) {
+                updateConflicts(data.upcomingConflicts);
+            }
+            
+            // Update AI recommendations
+            if (data.recommendations) {
+                updateRecommendations(data.recommendations);
+            }
+        }
+        
+        function updateSystemStatus(status) {
+            document.getElementById('activeTrainsCount').textContent = status.activeTrains || 0;
+            document.getElementById('aiStatus').textContent = status.operational ? 'ACTIVE' : 'OFFLINE';
+            document.getElementById('aiStatus').className = status.operational ? 'badge bg-success ms-2' : 'badge bg-danger ms-2';
+        }
+        
+        function updatePerformanceMetrics(performance) {
+            if (performance.currentMetrics) {
+                const metrics = performance.currentMetrics;
+                document.getElementById('throughputGauge').textContent = Math.round(metrics.throughput || 0) + '%';
+                document.getElementById('punctualityGauge').textContent = Math.round(metrics.punctuality || 0) + '%';
+                document.getElementById('utilizationGauge').textContent = Math.round(metrics.utilization || 0) + '%';
+            }
+        }
+        
+        function updateConflicts(conflicts) {
+            const container = document.getElementById('conflictsContainer');
+            if (!conflicts || conflicts.length === 0) {
+                container.innerHTML = '<p class="text-muted">No active conflicts detected</p>';
+                return;
+            }
+            
+            container.innerHTML = conflicts.map(conflict => `
+                <div class="conflict-alert mb-2">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>${conflict.type}</strong><br>
+                            <small>Trains: ${conflict.trains.join(', ')}</small><br>
+                            <small>ETA: ${new Date(conflict.estimatedTime).toLocaleTimeString()}</small>
+                        </div>
+                        <div>
+                            <button class="btn btn-light btn-sm" onclick="resolveConflict('${conflict.id}')">
+                                <i class="fas fa-cogs"></i> Resolve
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function updateRecommendations(recommendations) {
+            const container = document.getElementById('recommendationsContainer');
+            if (!recommendations || recommendations.length === 0) {
+                container.innerHTML = '<p class="text-muted">No AI recommendations at this time</p>';
+                return;
+            }
+            
+            container.innerHTML = recommendations.map(rec => `
+                <div class="ai-recommendation mb-2">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <strong>${rec.type.replace('_', ' ')}</strong><br>
+                            <small>${rec.message}</small>
+                        </div>
+                        <span class="badge bg-${rec.priority === 'HIGH' ? 'danger' : rec.priority === 'MEDIUM' ? 'warning' : 'info'}">
+                            ${rec.priority}
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function initializeCharts() {
+            // Initialize throughput chart
+            const throughputCtx = document.getElementById('throughputChart').getContext('2d');
+            throughputChart = new Chart(throughputCtx, {
+                type: 'line',
+                data: {
+                    labels: generateTimeLabels(),
+                    datasets: [{
+                        label: 'Trains/Hour',
+                        data: generateMockThroughputData(),
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+            
+            // Initialize punctuality chart
+            const punctualityCtx = document.getElementById('punctualityChart').getContext('2d');
+            punctualityChart = new Chart(punctualityCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['On Time', 'Delayed', 'Early'],
+                    datasets: [{
+                        data: [87, 10, 3],
+                        backgroundColor: ['#28a745', '#dc3545', '#17a2b8']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+        
+        function startRealTimeUpdates() {
+            updateInterval = setInterval(async () => {
+                try {
+                    const response = await window.authManager.makeAuthenticatedRequest('/api/traffic-control/real-time-dashboard');
+                    if (response) {
+                        const data = await response.json();
+                        updateDashboard(data.data);
+                    }
+                } catch (error) {
+                    console.error('Real-time update failed:', error);
+                }
+            }, 30000); // Update every 30 seconds
+        }
+        
+        async function triggerOptimization() {
+            try {
+                showNotification('Triggering AI optimization for all sections...', 'info');
+                
+                const response = await window.authManager.makeAuthenticatedRequest(
+                    `/api/traffic-control/optimize-section/${currentSection}`, 
+                    { method: 'POST', body: JSON.stringify({ timeHorizon: 3600 }) }
+                );
+                
+                if (response) {
+                    const result = await response.json();
+                    showNotification('AI optimization completed successfully!', 'success');
+                    
+                    // Refresh dashboard
+                    await initializeDashboard();
+                }
+                
+            } catch (error) {
+                console.error('Optimization error:', error);
+                showNotification('Optimization failed', 'error');
+            }
+        }
+        
+        function showScenarioAnalysis() {
+            const modal = new bootstrap.Modal(document.getElementById('scenarioModal'));
+            modal.show();
+        }
+        
+        async function runScenarioAnalysis() {
+            try {
+                const scenarioType = document.getElementById('scenarioType').value;
+                const affectedEntity = document.getElementById('affectedEntity').value;
+                const impactDuration = document.getElementById('impactDuration').value;
+                
+                const scenarios = [{
+                    id: 'SCENARIO_001',
+                    name: `${scenarioType} Analysis`,
+                    description: `Impact on ${affectedEntity} for ${impactDuration} minutes`,
+                    type: scenarioType,
+                    parameters: {
+                        affectedEntity,
+                        duration: parseInt(impactDuration)
+                    }
+                }];
+                
+                const response = await window.authManager.makeAuthenticatedRequest('/api/traffic-control/scenario-analysis', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        sectionId: currentSection,
+                        scenarios
+                    })
+                });
+                
+                if (response) {
+                    const result = await response.json();
+                    displayScenarioResults(result.data);
+                }
+                
+            } catch (error) {
+                console.error('Scenario analysis error:', error);
+                showNotification('Scenario analysis failed', 'error');
+            }
+        }
+        
+        function displayScenarioResults(results) {
+            const container = document.getElementById('scenarioResults');
+            const scenario = results.scenarios[0];
+            
+            if (scenario.error) {
+                container.innerHTML = `<div class="alert alert-danger">${scenario.error}</div>`;
+                return;
+            }
+            
+            container.innerHTML = `
+                <div class="alert alert-success">
+                    <h6>Scenario: ${scenario.name}</h6>
+                    <p>Feasibility: <strong>${scenario.feasibility}</strong></p>
+                    <p>Impact Analysis:</p>
+                    <ul>
+                        <li>Expected delay increase: ${scenario.impact?.delayIncrease || 'N/A'} minutes</li>
+                        <li>Affected trains: ${scenario.impact?.affectedTrains || 'N/A'}</li>
+                        <li>Recovery time: ${scenario.impact?.recoveryTime || 'N/A'} minutes</li>
+                    </ul>
+                    <p><strong>Recommendation:</strong> ${scenario.recommendation || 'Analysis complete'}</p>
+                </div>
+            `;
+        }
+        
+        async function resolveConflict(conflictId) {
+            const modal = new bootstrap.Modal(document.getElementById('decisionModal'));
+            modal.show();
+            
+            // Store conflict ID for decision submission
+            modal._conflictId = conflictId;
+        }
+        
+        async function submitDecision() {
+            try {
+                const decision = document.getElementById('controllerDecision').value;
+                const overrideReason = document.getElementById('overrideReason').value;
+                
+                const response = await window.authManager.makeAuthenticatedRequest('/api/traffic-control/controller-decision', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        sectionId: currentSection,
+                        trainId: 'TRN_12615', // This should be dynamic
+                        decision,
+                        aiRecommendation: 'HOLD_TRAIN',
+                        overrideReason: decision !== 'ACCEPT' ? overrideReason : null,
+                        timestamp: new Date()
+                    })
+                });
+                
+                if (response) {
+                    const result = await response.json();
+                    showNotification('Decision recorded successfully', 'success');
+                    
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('decisionModal'));
+                    modal.hide();
+                    
+                    // Refresh dashboard
+                    await initializeDashboard();
+                }
+                
+            } catch (error) {
+                console.error('Decision submission error:', error);
+                showNotification('Failed to record decision', 'error');
+            }
+        }
+        
+        function switchSection() {
+            currentSection = document.getElementById('sectionSelector').value;
+            loadSectionsData();
+        }
+        
+        // Utility functions
+        function generateTimeLabels() {
+            const labels = [];
+            const now = new Date();
+            for (let i = 23; i >= 0; i--) {
+                const time = new Date(now.getTime() - i * 60 * 60 * 1000);
+                labels.push(time.getHours() + ':00');
+            }
+            return labels;
+        }
+        
+        function generateMockThroughputData() {
+            return Array.from({length: 24}, () => Math.floor(Math.random() * 20) + 5);
+        }
+        
+        function showLoading(show) {
+            // Implement loading indicator
+        }
+        
+        function toggleTheme() {
+            // Implement theme toggle
+        }
+        
+        function logout() {
+            if (updateInterval) {
+                clearInterval(updateInterval);
+            }
+            window.authManager.logout();
+        }
+        
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            if (updateInterval) {
+                clearInterval(updateInterval);
+            }
+        });
+    </script>
+</body>
+</html>

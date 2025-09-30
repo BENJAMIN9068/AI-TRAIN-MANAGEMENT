@@ -144,6 +144,9 @@
                         <button class="btn btn-info me-2 mb-2" onclick="showUserManagement()">
                             <i class="fas fa-users"></i> Manage Users
                         </button>
+                        <button class="btn btn-success mb-2" onclick="openTrafficControl()">
+                            <i class="fas fa-traffic-light"></i> AI Traffic Control
+                        </button>
                     </div>
                 </div>
             </div>
@@ -441,6 +444,10 @@
                 showNotification('Emergency override activated!', 'warning');
                 // Add real override logic here
             }
+        }
+        
+        function openTrafficControl() {
+            window.open('/traffic-control.html', '_blank');
         }
         
         // Initialize when DOM loads

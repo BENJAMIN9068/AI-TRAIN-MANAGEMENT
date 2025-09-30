@@ -21,6 +21,7 @@ const stationRoutes = require('./routes/stations');
 const routeRoutes = require('./routes/routes');
 const staffRoutes = require('./routes/staff');
 const adminRoutes = require('./routes/admin');
+const trafficControlRoutes = require('./routes/traffic-control');
 
 // Import intelligent services
 const AlgorithmicBrain = require('./services/AlgorithmicBrain');
@@ -135,6 +136,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/trains', trainRoutes);
 app.use('/api/stations', stationRoutes);
 app.use('/api/routes', routeRoutes);
+app.use('/api/traffic-control', trafficControlRoutes);
 
 // Intelligent Services API Routes
 app.get('/api/intelligent/system-status', (req, res) => {

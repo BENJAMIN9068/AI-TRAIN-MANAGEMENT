@@ -167,6 +167,9 @@
                         <button class="btn btn-warning mb-2">
                             <i class="fas fa-phone"></i> Contact Control
                         </button>
+                        <button class="btn btn-success mb-2" onclick="openTrafficControl()">
+                            <i class="fas fa-traffic-light"></i> AI Traffic Control
+                        </button>
                     </div>
                 </div>
             </div>
@@ -312,6 +315,10 @@
         // Logout function (now uses AuthManager)
         function logout() {
             window.authManager.logout();
+        }
+        
+        function openTrafficControl() {
+            window.open('/traffic-control.html', '_blank');
         }
         
         // Initialize when DOM loads
