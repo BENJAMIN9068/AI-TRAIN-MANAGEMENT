@@ -1331,44 +1331,123 @@ p, .lead {
 }
 
 /* ==============================
-   Professional Theme Overrides
+   Professional Theme Overrides with Light/Dark Tokens
    ============================== */
+
+/* Theme tokens (default to light) */
 :root {
-    /* Professional deep blue + teal palette */
-    --primary-color: #0b132b;     /* Deep navy */
-    --secondary-color: #1c2541;   /* Slate blue */
-    --accent-color: #14b8a6;      /* Teal (attractive, professional) */
-    --light-color: #e5e7eb;       /* Light gray */
-    --dark-color: #e2e8f0;        /* Text on dark */
+    /* Light theme palette */
+    --bg: #f7f9fc;              /* App background */
+    --surface: #ffffff;         /* Card/Surface */
+    --text: #0f172a;            /* Primary text */
+    --muted: #475569;           /* Secondary text */
+    --primary: #2563eb;         /* Azure blue */
+    --primary-2: #1d4ed8;       /* Deeper blue */
+    --accent: #0ea5a6;          /* Teal accent */
+    --border: #e2e8f0;          /* Borders */
 
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, #0b132b 0%, #1c2541 100%);
-    --gradient-accent: linear-gradient(135deg, #22d3ee 0%, #14b8a6 100%);
-    --gradient-surface: linear-gradient(135deg, #0f172a 0%, #111827 100%);
+    --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%);
+    --gradient-accent: linear-gradient(135deg, #22d3ee 0%, var(--accent) 100%);
 }
 
-/* Minimal, professional background (no heavy animation) */
+/* Dark theme palette */
+:root[data-theme="dark"] {
+    --bg: #0b132b;
+    --surface: #111827;
+    --text: #e5e7eb;
+    --muted: #94a3b8;
+    --primary: #22d3ee;
+    --primary-2: #14b8a6;
+    --accent: #14b8a6;
+    --border: #1f2937;
+}
+
+/* Apply theme tokens to key components (high specificity, minimal !important) */
 body {
-    background: radial-gradient(1200px 600px at 20% -20%, rgba(20,184,166,0.12), transparent 60%),
-                radial-gradient(1000px 500px at 120% 20%, rgba(56,189,248,0.10), transparent 60%),
-                #0b132b !important;
+    color: var(--text) !important;
+    background: radial-gradient(1200px 600px at 20% -20%, rgba(14,165,166,0.08), transparent 60%),
+                radial-gradient(1000px 500px at 120% 20%, rgba(37,99,235,0.06), transparent 60%),
+                var(--bg) !important;
 }
 
-/* Remove heavy global animations */
-body::before { animation: none !important; opacity: 0.12 !important; }
+/* Reduce heavy global animations */
+body::before { animation: none !important; opacity: 0.08 !important; }
 .feature-card::after { display: none !important; animation: none !important; opacity: 0 !important; }
 
-/* Ensure hero card content and buttons are clearly visible */
-.card.bg-transparent .card-title { color: #e2e8f0 !important; }
-.card.bg-transparent .card-text { color: #94a3b8 !important; }
+/* Navbar */
+.navbar {
+    background: var(--gradient-primary) !important;
+    border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+}
+.navbar-brand { color: #ffffff !important; }
+.navbar-nav .nav-link { color: rgba(255,255,255,0.95) !important; }
+.navbar-nav .nav-link:hover { color: #ffffff !important; }
+
+/* Cards */
+.card {
+    background: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+    color: var(--text) !important;
+}
+.card .card-title { color: var(--text) !important; }
+.card .card-text { color: var(--muted) !important; }
+.card-header { background: var(--gradient-primary) !important; color: #fff !important; border: none !important; }
+
+/* Buttons */
+.btn-primary {
+    background: var(--gradient-primary) !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+.btn-primary:hover { filter: brightness(1.05); }
+.btn-outline-primary { border-color: var(--primary) !important; color: var(--primary) !important; }
+.btn-outline-primary:hover { background: var(--gradient-primary) !important; color: #ffffff !important; }
+.btn-light { background: #ffffff !important; color: #0f172a !important; border: 1px solid var(--border) !important; }
+:root[data-theme="dark"] .btn-light { background: #e5e7eb !important; color: #0b132b !important; }
+
+/* Map legend & footer */
+.map-legend { background: var(--surface) !important; color: var(--text) !important; border: 1px solid var(--border) !important; }
+footer.bg-dark { background: linear-gradient(135deg, var(--primary-2), var(--primary)) !important; }
+footer p, footer h5 { color: #ffffff !important; }
+
+/* Ensure hero card buttons are visible */
 .card.bg-transparent .btn-light { display: inline-block !important; }
 
-/* Calmer navbar styling (no shine) already applied; ensure text stays upright */
+/* Maintain upright header */
 .navbar-brand, .navbar-brand i { transform: none !important; }
 
-/* Button focus/hover accessibility */
-.btn-light:focus { box-shadow: 0 0 0 0.25rem rgba(20,184,166,0.35) !important; }
+/* Theme Toggle Button */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    width: 50px;
+    height: 50px;
+    background: var(--surface);
+    border: 2px solid var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    font-size: 20px;
+    color: var(--primary);
+}
 
-/* Outline buttons to match theme */
-.btn-outline-primary { border-color: var(--accent-color) !important; color: var(--accent-color) !important; }
-.btn-outline-primary:hover { background: var(--gradient-accent) !important; color: #0b132b !important; }
+.theme-toggle:hover {
+    background: var(--primary);
+    color: #ffffff;
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+@media (max-width: 768px) {
+    .theme-toggle {
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
+    }
+}
