@@ -61,6 +61,51 @@ router.get('/sections', authenticateToken, authorizeRoles('admin', 'staff'), asy
 });
 
 /**
+ * @route   GET /api/traffic-control/section/:sectionId
+ * @desc    Get individual section data with current status
+ * @access  Private (Admin/Staff)
+ */
+router.get('/section/:sectionId', authenticateToken, authorizeRoles('admin', 'staff'), async (req, res) => {
+    try {
+        const { sectionId } = req.params;
+        const sections = await getSections();
+        const section = sections.find(s => s.id === sectionId);
+        
+        if (!section) {
+            return res.status(404).json({
+                success: false,
+                message: `Section ${sectionId} not found`
+            });
+        }
+        
+        // Get section-specific data
+        const sectionData = {
+            ...section,
+            currentTrains: await getTrainsInSection(sectionId),
+            upcomingTrains: await getUpcomingTrains(sectionId, 3600),
+            capacity: Math.floor(Math.random() * 40) + 60, // Mock capacity %
+            averageSpeed: Math.floor(Math.random() * 30) + 80, // Mock speed
+            onTimePerformance: Math.floor(Math.random() * 20) + 80, // Mock performance %
+            lastUpdate: new Date()
+        };
+        
+        res.json({
+            success: true,
+            data: sectionData,
+            timestamp: new Date()
+        });
+        
+    } catch (error) {
+        console.error('Get section error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to retrieve section data',
+            error: error.message
+        });
+    }
+});
+
+/**
  * @route   POST /api/traffic-control/optimize-section/:sectionId
  * @desc    Trigger AI optimization for a specific section
  * @access  Private (Admin/Staff)
