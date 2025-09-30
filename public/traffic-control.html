@@ -85,6 +85,59 @@
         .gauge-good { background: conic-gradient(#17a2b8 0deg 270deg, #e9ecef 270deg 360deg); }
         .gauge-fair { background: conic-gradient(#ffc107 0deg 180deg, #e9ecef 180deg 360deg); }
         .gauge-poor { background: conic-gradient(#dc3545 0deg 90deg, #e9ecef 90deg 360deg); }
+        
+        /* Railway Track Styling */
+        .railway-track {
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.3));
+        }
+        
+        .railway-main-line {
+            stroke-width: 6px;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.4));
+        }
+        
+        .railway-electrified {
+            stroke-width: 6px;
+            filter: drop-shadow(0 0 8px rgba(255,215,0,0.6));
+            animation: electrified-glow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes electrified-glow {
+            from { filter: drop-shadow(0 0 8px rgba(255,215,0,0.6)); }
+            to { filter: drop-shadow(0 0 12px rgba(255,215,0,0.9)); }
+        }
+        
+        .track-name {
+            background: rgba(255,255,255,0.9);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+            color: #2c3e50;
+            text-align: center;
+            border: 1px solid #ddd;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        
+        .station-marker {
+            background: #fff;
+            border: 2px solid #007bff;
+            border-radius: 50%;
+            width: 12px;
+            height: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .train-marker.moving {
+            animation: train-pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes train-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
     </style>
 </head>
 <body>
@@ -456,48 +509,159 @@
         function addRailwaySections() {
             if (!railwayMap) return;
 
-            // Sample railway lines for different sections
+            // Railway sections with realistic track paths following actual routes
             const sections = {
                 'SECT_001': {
                     name: 'Delhi-Mumbai Section A',
-                    coordinates: [[28.6139, 77.2090], [19.0760, 72.8777]],
+                    // Realistic Delhi-Mumbai railway route via Gwalior, Jhansi, Bhopal
+                    coordinates: [
+                        [28.6139, 77.2090],  // New Delhi
+                        [28.4595, 77.0266],  // Gurgaon
+                        [28.2096, 76.8413],  // Rewari
+                        [27.7959, 76.6413],  // Alwar
+                        [27.1767, 78.0081],  // Agra
+                        [26.2183, 78.1828],  // Gwalior
+                        [25.4484, 78.5685],  // Jhansi
+                        [24.5854, 78.6568],  // Lalitpur
+                        [23.2599, 77.4126],  // Bhopal
+                        [22.5726, 75.8274],  // Indore Junction
+                        [21.1458, 79.0882],  // Nagpur
+                        [20.7033, 78.9588],  // Wardha
+                        [19.8762, 75.3433],  // Aurangabad
+                        [19.2183, 72.9781],  // Kalyan
+                        [19.0760, 72.8777]   // Mumbai CST
+                    ],
                     color: '#007bff',
-                    trains: [{id: 'T001', pos: [26.8, 75.8], type: 'express'}]
+                    trains: [{id: 'T001', pos: [25.4484, 78.5685], type: 'express'}]  // At Jhansi
                 },
                 'SECT_002': {
-                    name: 'Mumbai-Pune Section B', 
-                    coordinates: [[19.0760, 72.8777], [18.5204, 73.8567]],
+                    name: 'Mumbai-Pune Section B',
+                    // Realistic Mumbai-Pune route via Lonavala
+                    coordinates: [
+                        [19.0760, 72.8777],  // Mumbai CST
+                        [19.0596, 72.8295],  // Dadar
+                        [19.2183, 72.9781],  // Kalyan
+                        [19.2147, 73.1089],  // Karjat
+                        [18.7537, 73.4057],  // Lonavala (Famous hill station route)
+                        [18.6298, 73.7997],  // Khadki
+                        [18.5204, 73.8567]   // Pune Junction
+                    ],
                     color: '#28a745',
-                    trains: [{id: 'T002', pos: [18.8, 73.3], type: 'freight'}]
+                    trains: [{id: 'T002', pos: [18.7537, 73.4057], type: 'freight'}]  // At Lonavala
                 },
                 'SECT_003': {
                     name: 'Chennai-Bangalore Corridor',
-                    coordinates: [[13.0827, 80.2707], [12.9716, 77.5946]],
+                    // Realistic Chennai-Bangalore route via Katpadi, Jolarpettai
+                    coordinates: [
+                        [13.0827, 80.2707],  // Chennai Central
+                        [12.9165, 79.1325],  // Kanchipuram
+                        [12.5266, 78.2108],  // Vellore
+                        [12.9698, 78.6051],  // Katpadi Junction
+                        [12.5755, 78.5707],  // Jolarpettai Junction
+                        [12.3375, 78.1348],  // Dharmapuri
+                        [12.2958, 77.6387],  // Hosur
+                        [12.9716, 77.5946]   // Bangalore City
+                    ],
                     color: '#dc3545',
-                    trains: [{id: 'T003', pos: [13.0, 78.9], type: 'vip'}]
+                    trains: [{id: 'T003', pos: [12.5755, 78.5707], type: 'vip'}]  // At Jolarpettai
                 }
             };
 
-            // Add railway lines to map
+            // Add railway lines to map with realistic curved paths
             Object.values(sections).forEach(section => {
+                // Create railway line with realistic track appearance
                 const polyline = L.polyline(section.coordinates, {
                     color: section.color,
-                    weight: 4,
-                    opacity: 0.8
+                    weight: 5,
+                    opacity: 0.9,
+                    smoothFactor: 1.0,
+                    className: 'railway-track'
+                }).addTo(railwayMap);
+                
+                // Add railway track pattern (parallel lines effect)
+                const trackBorder = L.polyline(section.coordinates, {
+                    color: '#2c3e50',
+                    weight: 7,
+                    opacity: 0.6,
+                    smoothFactor: 1.0,
+                    dashArray: '10, 5'
+                }).addTo(railwayMap);
+                
+                // Add the main track line on top
+                polyline.bringToFront();
+
+                // Add major station markers along the route
+                const stationIndices = {
+                    'SECT_001': [0, 4, 6, 8, 10, 14], // Delhi, Agra, Jhansi, Bhopal, Nagpur, Mumbai
+                    'SECT_002': [0, 2, 4, 6],         // Mumbai, Kalyan, Lonavala, Pune
+                    'SECT_003': [0, 3, 4, 7]          // Chennai, Katpadi, Jolarpettai, Bangalore
+                };
+                
+                const stationNames = {
+                    'SECT_001': ['New Delhi', 'Agra', 'Jhansi', 'Bhopal', 'Nagpur', 'Mumbai CST'],
+                    'SECT_002': ['Mumbai CST', 'Kalyan', 'Lonavala', 'Pune Junction'],
+                    'SECT_003': ['Chennai Central', 'Katpadi Jn', 'Jolarpettai Jn', 'Bangalore City']
+                };
+                
+                const sectionKey = Object.keys(sections).find(key => sections[key] === section);
+                const indices = stationIndices[sectionKey] || [0, Math.floor(section.coordinates.length/2), section.coordinates.length-1];
+                const names = stationNames[sectionKey] || ['Start', 'Middle', 'End'];
+                
+                indices.forEach((index, i) => {
+                    if (section.coordinates[index] && names[i]) {
+                        const stationMarker = L.circleMarker(section.coordinates[index], {
+                            radius: 6,
+                            fillColor: '#fff',
+                            color: section.color,
+                            weight: 3,
+                            opacity: 1,
+                            fillOpacity: 1
+                        }).addTo(railwayMap);
+                        
+                        stationMarker.bindPopup(`
+                            <div class="station-popup">
+                                <h6><strong>${names[i]}</strong></h6>
+                                <p><strong>Section:</strong> ${section.name}</p>
+                                <p><strong>Type:</strong> Major Junction</p>
+                            </div>
+                        `);
+                    }
+                });
+                
+                // Add section route info at midpoint
+                const midIndex = Math.floor(section.coordinates.length / 2);
+                const midPoint = section.coordinates[midIndex];
+                
+                const routeLabel = L.marker(midPoint, {
+                    icon: L.divIcon({
+                        className: 'route-label',
+                        html: `<div class="track-name" style="background: ${section.color}; color: white;">${section.name}</div>`,
+                        iconSize: [200, 20],
+                        iconAnchor: [100, 10]
+                    })
                 }).addTo(railwayMap);
 
-                // Add section label
-                const midPoint = [
-                    (section.coordinates[0][0] + section.coordinates[1][0]) / 2,
-                    (section.coordinates[0][1] + section.coordinates[1][1]) / 2
-                ];
-                L.marker(midPoint).addTo(railwayMap)
-                    .bindPopup(`<b>${section.name}</b><br>Active trains: ${section.trains.length}`);
-
-                // Add train markers
+                // Add train markers with enhanced styling
                 section.trains.forEach(train => {
-                    const marker = L.marker(train.pos).addTo(railwayMap);
-                    marker.bindPopup(`<b>Train ${train.id}</b><br>Type: ${train.type}`);
+                    const trainIcon = L.divIcon({
+                        className: 'train-marker-advanced',
+                        html: `<div class="train-marker ${train.type} moving" title="${train.type} train">
+                                   <i class="fas fa-train"></i>
+                               </div>`,
+                        iconSize: [30, 30],
+                        iconAnchor: [15, 15]
+                    });
+                    
+                    const marker = L.marker(train.pos, { icon: trainIcon }).addTo(railwayMap);
+                    marker.bindPopup(`
+                        <div class="train-popup">
+                            <h6><strong>Train ${train.id}</strong></h6>
+                            <p><strong>Type:</strong> ${train.type.toUpperCase()}</p>
+                            <p><strong>Section:</strong> ${section.name}</p>
+                            <p><strong>Status:</strong> <span style="color: #28a745;">Running</span></p>
+                            <p><strong>Speed:</strong> ${Math.floor(Math.random() * 40) + 80} km/h</p>
+                        </div>
+                    `);
                 });
             });
         }
