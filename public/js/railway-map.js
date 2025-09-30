@@ -49,9 +49,11 @@ class IRTOMSRailwayMap {
             maxBoundsViscosity: this.options.maxBoundsViscosity
         });
         
-        // Add base map layer
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
+        // Add base map layer optimized for India
+        const baseLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 18,
+            minZoom: 4
         }).addTo(this.map);
         
         // Add OpenRailwayMap layer for Indian railways
@@ -70,11 +72,13 @@ class IRTOMSRailwayMap {
      * Add OpenRailwayMap railway infrastructure layer
      */
     addRailwayLayer() {
-        // Add OpenRailwayMap infrastructure layer
+        // Add OpenRailwayMap infrastructure layer with enhanced visibility for India
         const railwayLayer = L.tileLayer('https://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png', {
             attribution: '© OpenRailwayMap contributors',
             maxZoom: 18,
-            opacity: 0.7
+            minZoom: 4,
+            opacity: 0.8,
+            zIndex: 2
         });
         
         railwayLayer.addTo(this.map);

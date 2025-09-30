@@ -1,45 +1,47 @@
 /* IRTOMS Railway Management System - Main Stylesheet */
 
-/* Ultra-Realistic Railway Theme */
+/* Dark Purple & White Attractive Theme */
 :root {
-    /* Core Railway Colors */
-    --primary-color: #1e3c72;
-    --secondary-color: #2a5298;
-    --accent-color: #ff6b35;
-    --success-color: #00c851;
-    --danger-color: #ff3547;
-    --warning-color: #ffbb33;
-    --info-color: #33b5e5;
-    --light-color: #f8f9fa;
-    --dark-color: #2c3e50;
+    /* Core Purple & White Colors */
+    --primary-color: #6B46C1;        /* Deep Purple */
+    --secondary-color: #8B5CF6;      /* Medium Purple */
+    --accent-color: #A855F7;         /* Bright Purple */
+    --success-color: #10B981;        /* Emerald Green */
+    --danger-color: #EF4444;         /* Red */
+    --warning-color: #F59E0B;        /* Amber */
+    --info-color: #3B82F6;          /* Blue */
+    --light-color: #FFFFFF;          /* Pure White */
+    --dark-color: #1F2937;          /* Dark Gray */
     
-    /* Indian Railway Theme */
-    --railway-blue: #1e3c72;
-    --railway-orange: #ff6b35;
-    --steel-gray: #5a6c7d;
-    --track-brown: #8b4513;
-    --station-yellow: #ffd700;
+    /* Purple Theme Palette */
+    --deep-purple: #581C87;          /* Darkest Purple */
+    --royal-purple: #6B46C1;         /* Main Purple */
+    --light-purple: #A855F7;         /* Bright Purple */
+    --purple-accent: #C084FC;        /* Light Purple Accent */
+    --white-accent: #F8FAFC;         /* Off White */
     
     /* Advanced Shadows & Effects */
-    --shadow-soft: 0 2px 15px rgba(0, 0, 0, 0.08);
-    --shadow-medium: 0 5px 25px rgba(0, 0, 0, 0.15);
-    --shadow-strong: 0 10px 40px rgba(0, 0, 0, 0.25);
+    --shadow-soft: 0 2px 15px rgba(107, 70, 193, 0.1);
+    --shadow-medium: 0 5px 25px rgba(107, 70, 193, 0.2);
+    --shadow-strong: 0 10px 40px rgba(107, 70, 193, 0.3);
+    --shadow-purple: 0 0 30px rgba(168, 85, 247, 0.4);
     --border-radius: 12px;
     --card-border-radius: 16px;
     
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-    --gradient-accent: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
-    --gradient-success: linear-gradient(135deg, #00c851 0%, #007e33 100%);
-    --gradient-surface: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    /* Purple Gradients */
+    --gradient-primary: linear-gradient(135deg, #6B46C1 0%, #8B5CF6 100%);
+    --gradient-accent: linear-gradient(135deg, #A855F7 0%, #C084FC 100%);
+    --gradient-success: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    --gradient-surface: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);
+    --gradient-dark: linear-gradient(135deg, #581C87 0%, #6B46C1 100%);
 }
 
-/* Global Styles with Ultra-Realistic Effects */
+/* Global Styles with Dark Purple Theme */
 body {
     font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     line-height: 1.6;
     color: var(--dark-color);
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #6B46C1 0%, #8B5CF6 50%, #A855F7 100%);
     background-attachment: fixed;
     min-height: 100vh;
     padding-top: 0;
@@ -60,7 +62,7 @@ body {
 
 /* Ultra-Modern Navigation */
 .navbar {
-    background: rgba(30, 60, 114, 0.95) !important;
+    background: rgba(107, 70, 193, 0.95) !important;
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     box-shadow: var(--shadow-medium);
@@ -82,15 +84,15 @@ body {
 
 .navbar-brand i {
     margin-right: 0.5rem;
-    color: var(--railway-orange);
+    color: var(--white-accent);
     font-size: 1.4rem;
-    filter: drop-shadow(0 2px 4px rgba(255, 107, 53, 0.3));
+    filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.3));
     animation: pulse-glow 2s infinite;
 }
 
 @keyframes pulse-glow {
-    0%, 100% { filter: drop-shadow(0 2px 4px rgba(255, 107, 53, 0.3)); }
-    50% { filter: drop-shadow(0 2px 8px rgba(255, 107, 53, 0.6)); }
+    0%, 100% { filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.3)); }
+    50% { filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.6)); }
 }
 
 .navbar-nav .nav-link {
@@ -102,7 +104,7 @@ body {
 }
 
 .navbar-nav .nav-link:hover {
-    color: var(--railway-orange) !important;
+    color: var(--purple-accent) !important;
     transform: translateY(-2px);
 }
 
@@ -375,7 +377,7 @@ body {
     position: absolute;
     bottom: 20px;
     left: 20px;
-    background: rgba(30, 60, 114, 0.95);
+    background: rgba(107, 70, 193, 0.95);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     color: white;
@@ -410,18 +412,19 @@ body {
 }
 
 .legend-color.train {
-    background: var(--railway-orange);
-    box-shadow: 0 0 8px rgba(255, 107, 53, 0.4);
+    background: var(--light-purple);
+    box-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
 }
 
 .legend-color.station {
-    background: var(--station-yellow);
-    box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+    background: var(--white-accent);
+    box-shadow: 0 0 8px rgba(248, 250, 252, 0.6);
 }
 
 .legend-color.track {
-    background: var(--steel-gray);
+    background: var(--secondary-color);
     border-radius: 2px;
+    box-shadow: 0 0 8px rgba(139, 92, 246, 0.3);
 }
 
 .train-marker {
@@ -588,6 +591,54 @@ body {
     background: white;
     transform: translateY(-2px) scale(1.05);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Train Markers with Purple Theme */
+.train-marker {
+    background: var(--gradient-accent);
+    border: 2px solid white;
+    border-radius: 50%;
+    color: white;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-purple);
+    transition: all 0.3s ease;
+}
+
+.train-marker:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.6);
+}
+
+.train-moving {
+    animation: pulse-train 2s infinite;
+}
+
+@keyframes pulse-train {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: var(--shadow-purple);
+    }
+    50% { 
+        transform: scale(1.1);
+        box-shadow: 0 0 30px rgba(168, 85, 247, 0.8);
+    }
+}
+
+/* Station Markers */
+.station-marker {
+    background: var(--white-accent);
+    border: 2px solid var(--primary-color);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.station-marker:hover {
+    background: var(--primary-color);
+    transform: scale(1.3);
+    box-shadow: 0 0 15px rgba(107, 70, 193, 0.5);
 }
 
 .btn-emergency {
