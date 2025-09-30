@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Portal - AI POWERED TRAIN TRAFFIC MANAGEMENT SYSTEM</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Theme Toggle Button -->
+    <div class="theme-toggle" onclick="toggleTheme()" title="Switch Theme">
+        <i class="fas fa-moon" id="theme-icon"></i>
+    </div>
+    
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/staff.html">
+                <i class="fas fa-train mr-2"></i>
+                AI POWERED STAFF PORTAL
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/staff.html">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/staff.html">
+                            <i class="fas fa-route"></i> My Routes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/staff.html">
+                            <i class="fas fa-clipboard-list"></i> Reports
+                        </a>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user"></i>
+                            <span id="staffName">Staff Member</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="/index.html" onclick="logout()">
+                                    <i class="fas fa-sign-out-alt"></i> Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+        <!-- Welcome Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4><i class="fas fa-user"></i> Staff Portal Dashboard</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle"></i>
+                            <strong>Welcome Railway Staff!</strong> You have successfully logged in to the Staff Portal.
+                        </div>
+                        <p>Access your assigned routes, report incidents, and manage your daily operations.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="row mt-4">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card stats-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-route fa-3x mb-3"></i>
+                        <h3>3</h3>
+                        <p>Assigned Routes</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card stats-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-clock fa-3x mb-3"></i>
+                        <h3>8</h3>
+                        <p>Hours on Duty</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card stats-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-check fa-3x mb-3"></i>
+                        <h3>12</h3>
+                        <p>Tasks Completed</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card stats-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-bell fa-3x mb-3"></i>
+                        <h3>2</h3>
+                        <p>New Notifications</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard Content -->
+        <div class="row mt-4">
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-tasks"></i> Today's Tasks</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group">
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <span><i class="fas fa-train"></i> Check Train 12345 Status</span>
+                                <span class="badge bg-warning">Pending</span>
+                            </div>
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <span><i class="fas fa-map-marker-alt"></i> Station Inspection - Platform 3</span>
+                                <span class="badge bg-success">Completed</span>
+                            </div>
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <span><i class="fas fa-clipboard"></i> Submit Daily Report</span>
+                                <span class="badge bg-info">In Progress</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-info-circle"></i> Quick Actions</h5>
+                    </div>
+                    <div class="card-body">
+                        <button class="btn btn-primary me-2 mb-2">
+                            <i class="fas fa-plus"></i> Report Incident
+                        </button>
+                        <button class="btn btn-success me-2 mb-2">
+                            <i class="fas fa-check"></i> Mark Task Complete
+                        </button>
+                        <button class="btn btn-info me-2 mb-2">
+                            <i class="fas fa-map"></i> View Route Map
+                        </button>
+                        <button class="btn btn-warning mb-2">
+                            <i class="fas fa-phone"></i> Contact Control
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schedule Information -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-calendar"></i> Today's Schedule</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>Train</th>
+                                        <th>Route</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>09:00 AM</td>
+                                        <td>12345 Express</td>
+                                        <td>Delhi - Mumbai</td>
+                                        <td><span class="badge bg-success">On Time</span></td>
+                                        <td><button class="btn btn-sm btn-primary">View</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>11:30 AM</td>
+                                        <td>67890 Local</td>
+                                        <td>Mumbai - Pune</td>
+                                        <td><span class="badge bg-warning">Delayed</span></td>
+                                        <td><button class="btn btn-sm btn-primary">View</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>02:15 PM</td>
+                                        <td>54321 Superfast</td>
+                                        <td>Pune - Bangalore</td>
+                                        <td><span class="badge bg-info">Scheduled</span></td>
+                                        <td><button class="btn btn-sm btn-primary">View</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white mt-5 py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>AI POWERED TRAIN TRAFFIC MANAGEMENT</h5>
+                    <p>Railway Staff Portal</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <p>&copy; 2024 Railway Management System. All rights reserved.</p>
+                    <p>
+                        <i class="fas fa-shield-alt"></i> Secure Staff Portal
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Theme Toggle Functionality
+        function toggleTheme() {
+            const root = document.documentElement;
+            const themeIcon = document.getElementById('theme-icon');
+            const currentTheme = root.getAttribute('data-theme');
+            
+            if (currentTheme === 'dark') {
+                root.removeAttribute('data-theme');
+                themeIcon.className = 'fas fa-moon';
+                localStorage.setItem('theme', 'light');
+            } else {
+                root.setAttribute('data-theme', 'dark');
+                themeIcon.className = 'fas fa-sun';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+        
+        // Initialize theme on page load
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeIcon = document.getElementById('theme-icon');
+            
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeIcon.className = 'fas fa-sun';
+            } else {
+                themeIcon.className = 'fas fa-moon';
+            }
+        }
+        
+        // Check authentication
+        function checkAuth() {
+            const token = sessionStorage.getItem('authToken');
+            const user = JSON.parse(sessionStorage.getItem('user') || 'null');
+            
+            if (!token || !user || user.role !== 'staff') {
+                alert('Access denied. Staff login required.');
+                window.location.href = '/index.html';
+                return;
+            }
+            
+            // Update staff name
+            document.getElementById('staffName').textContent = user.fullName || 'Staff Member';
+        }
+        
+        // Logout function
+        function logout() {
+            sessionStorage.removeItem('authToken');
+            sessionStorage.removeItem('user');
+            window.location.href = '/index.html';
+        }
+        
+        // Initialize when DOM loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initTheme();
+            checkAuth();
+        });
+    </script>
+</body>
+</html>

@@ -374,31 +374,51 @@
                 return;
             }
             
+            // Show loading state
+            const loginBtn = document.querySelector('#loginModal .btn-primary');
+            const originalText = loginBtn.textContent;
+            loginBtn.textContent = 'Logging in...';
+            loginBtn.disabled = true;
+            
             try {
-                const response = await fetch('/api/auth-login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password, role })
-                });
+                // Simulate login for demo purposes
+                const userData = {
+                    id: Date.now(),
+                    username: username,
+                    fullName: username.charAt(0).toUpperCase() + username.slice(1),
+                    role: role,
+                    email: username + '@railways.gov.in'
+                };
                 
-                if (response.ok) {
-                    const data = await response.json();
-                    localStorage.setItem('user', JSON.stringify(data.user));
-                    updateUIForUser(data.user);
-                    loginModal.hide();
-                    showNotification('Login successful!', 'success');
-                } else {
-                    const error = await response.json();
-                    showNotification(error.message || 'Login failed', 'error');
-                }
+                // Store user data
+                sessionStorage.setItem('authToken', 'demo-token-' + Date.now());
+                sessionStorage.setItem('user', JSON.stringify(userData));
+                
+                loginModal.hide();
+                showNotification('Login successful! Redirecting...', 'success');
+                
+                // Redirect to appropriate dashboard
+                setTimeout(() => {
+                    if (role === 'admin') {
+                        window.location.href = '/admin.html';
+                    } else if (role === 'staff') {
+                        window.location.href = '/staff.html';
+                    }
+                }, 1500);
+                
             } catch (error) {
                 console.error('Login error:', error);
                 showNotification('Network error. Please try again.', 'error');
+            } finally {
+                // Restore button state
+                loginBtn.textContent = originalText;
+                loginBtn.disabled = false;
             }
         }
         
         function logout() {
-            localStorage.removeItem('user');
+            sessionStorage.removeItem('authToken');
+            sessionStorage.removeItem('user');
             updateUIForUser(null);
             showNotification('Logged out successfully', 'info');
         }
@@ -419,17 +439,17 @@
         }
         
         function showStaffPortal() {
-            const user = JSON.parse(localStorage.getItem('user') || 'null');
+            const user = JSON.parse(sessionStorage.getItem('user') || 'null');
             if (!user) {
                 showNotification('Please login first', 'warning');
                 showLogin();
                 return;
             }
-            showNotification('Staff Portal - Feature coming soon!', 'info');
+            window.location.href = '/staff.html';
         }
         
         function showAdminPanel() {
-            const user = JSON.parse(localStorage.getItem('user') || 'null');
+            const user = JSON.parse(sessionStorage.getItem('user') || 'null');
             if (!user) {
                 showNotification('Please login first', 'warning');
                 showLogin();
@@ -439,11 +459,11 @@
                 showNotification('Admin access required', 'error');
                 return;
             }
-            showNotification('Admin Panel - Feature coming soon!', 'info');
+            window.location.href = '/admin.html';
         }
         
         function showDashboard() {
-            const user = JSON.parse(localStorage.getItem('user') || 'null');
+            const user = JSON.parse(sessionStorage.getItem('user') || 'null');
             if (!user) return;
             
             if (user.role === 'admin') {
@@ -546,7 +566,7 @@
         
         // Check for existing user on load
         window.addEventListener('load', function() {
-            const user = JSON.parse(localStorage.getItem('user') || 'null');
+            const user = JSON.parse(sessionStorage.getItem('user') || 'null');
             if (user) {
                 updateUIForUser(user);
             }
