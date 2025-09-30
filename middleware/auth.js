@@ -14,7 +14,8 @@ const authenticateToken = async (req, res, next) => {
       });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const secret = process.env.JWT_SECRET || 'IRTOMS_Railway_System_Secret_Key_2024_BCS';
+    const decoded = jwt.verify(token, secret);
     const user = await User.findById(decoded.userId).select('-password');
     
     if (!user || !user.isActive) {
@@ -95,9 +96,10 @@ const authenticateSession = (req, res, next) => {
 
 // Generate JWT Token
 const generateToken = (userId) => {
+  const secret = process.env.JWT_SECRET || 'IRTOMS_Railway_System_Secret_Key_2024_BCS';
   return jwt.sign(
     { userId },
-    process.env.JWT_SECRET,
+    secret,
     { 
       expiresIn: process.env.JWT_EXPIRE || '24h',
       issuer: 'IRTOMS-Railway-System'
@@ -108,7 +110,8 @@ const generateToken = (userId) => {
 // Verify Token Utility
 const verifyToken = (token) => {
   try {
-    return jwt.verify(token, process.env.JWT_SECRET);
+    const secret = process.env.JWT_SECRET || 'IRTOMS_Railway_System_Secret_Key_2024_BCS';
+    return jwt.verify(token, secret);
   } catch (error) {
     throw new Error('Invalid token');
   }
