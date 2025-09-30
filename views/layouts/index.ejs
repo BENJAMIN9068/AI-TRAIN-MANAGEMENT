@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Leaflet CSS for Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-train mr-2"></i>
+                IRTOMS Railway Management
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-home"></i> Home
+                        </a>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav">
+                    <% if (user) { %>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user"></i>
+                                <%= user.fullName || user.username %>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" href="<%= user.role === 'admin' ? '/admin' : '/staff' %>">
+                                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" href="/logout">
+                                        <i class="fas fa-sign-out-alt"></i> Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    <% } else { %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </a>
+                        </li>
+                    <% } %>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+        <!-- Hero Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="jumbotron bg-primary text-white p-5 rounded">
+                    <h1 class="display-4">
+                        <i class="fas fa-train"></i>
+                        Intelligent Railway Traffic Optimization System
+                    </h1>
+                    <p class="lead">
+                        Advanced railway management with priority-based scheduling, real-time tracking, 
+                        and intelligent conflict resolution for optimal train operations.
+                    </p>
+                    <hr class="my-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card bg-transparent border-light">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-users"></i> Staff Portal
+                                    </h5>
+                                    <p class="card-text">
+                                        Driver interface for train registration, journey management, 
+                                        and real-time position tracking.
+                                    </p>
+                                    <a href="/staff" class="btn btn-light">
+                                        <i class="fas fa-arrow-right"></i> Access Staff Portal
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-transparent border-light">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-cogs"></i> Admin Control Panel
+                                    </h5>
+                                    <p class="card-text">
+                                        Master control center for traffic management, emergency controls, 
+                                        and system-wide monitoring.
+                                    </p>
+                                    <a href="/admin" class="btn btn-light">
+                                        <i class="fas fa-arrow-right"></i> Access Admin Panel
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <h2 class="text-center mb-4">System Features</h2>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-trophy fa-3x text-warning mb-3"></i>
+                        <h5 class="card-title">Priority-Based System</h5>
+                        <p class="card-text">
+                            VIP trains (Vande Bharat, Rajdhani) get highest priority with zero halts, 
+                            followed by Superfast, Express, Passenger, and Freight trains.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-map fa-3x text-success mb-3"></i>
+                        <h5 class="card-title">Real-Time Visualization</h5>
+                        <p class="card-text">
+                            Interactive railway network map with live train movements, 
+                            color-coded by priority, and real-time position tracking.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-brain fa-3x text-info mb-3"></i>
+                        <h5 class="card-title">Intelligent Scheduling</h5>
+                        <p class="card-text">
+                            Automatic route planning, conflict resolution, and optimal 
+                            halt allocation based on train priorities and track availability.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Live Railway Network Map -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="fas fa-map"></i> Live Indian Railway Network
+                        </h5>
+                        <div class="map-controls">
+                            <button class="btn btn-sm btn-outline-primary" onclick="demoTrains()">
+                                <i class="fas fa-play"></i> Demo Trains
+                            </button>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="clearTrains()">
+                                <i class="fas fa-stop"></i> Clear
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body p-0" style="position: relative;">
+                        <div class="railway-map-container">
+                            <div id="railwayMap"></div>
+                            
+                            <!-- Map Legend -->
+                            <div class="map-legend">
+                                <h6><i class="fas fa-info-circle"></i> Legend</h6>
+                                <div class="legend-item">
+                                    <div class="legend-color vip"></div>
+                                    <span>VIP Trains</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color superfast"></div>
+                                    <span>Superfast Express</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color express"></div>
+                                    <span>Express Trains</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color passenger"></div>
+                                    <span>Passenger</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color freight"></div>
+                                    <span>Freight</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color station"></div>
+                                    <span>Stations</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-3">
+                            <p class="mb-2 text-muted">
+                                <i class="fas fa-info-circle"></i> 
+                                Interactive map showing real Indian railway network powered by OpenRailwayMap. 
+                                Click on stations and trains for details. Use demo mode to see sample train movements.
+                            </p>
+                            <div class="row text-center">
+                                <div class="col-md-3 col-6">
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <i class="fas fa-map-marker-alt text-primary me-2"></i>
+                                        <small><strong id="stationCount">30+</strong> Major Stations</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <i class="fas fa-route text-success me-2"></i>
+                                        <small><strong>67,368 km</strong> Network</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <i class="fas fa-train text-info me-2"></i>
+                                        <small><strong id="trainCount">0</strong> Active Trains</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <i class="fas fa-clock text-warning me-2"></i>
+                                        <small><strong>Real-time</strong> Updates</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Train Priority Legend -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-list"></i> Train Priority System
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-2 mb-2">
+                                <span class="badge bg-danger p-2 w-100">
+                                    <i class="fas fa-star"></i> VIP Trains
+                                </span>
+                                <small class="text-muted d-block">Zero halts, No delays</small>
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <span class="badge bg-warning p-2 w-100">
+                                    <i class="fas fa-rocket"></i> Superfast
+                                </span>
+                                <small class="text-muted d-block">3-4 halts, 10-15 min delay</small>
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <span class="badge bg-primary p-2 w-100">
+                                    <i class="fas fa-train"></i> Express
+                                </span>
+                                <small class="text-muted d-block">4-5 halts, 20-25 min delay</small>
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <span class="badge bg-success p-2 w-100">
+                                    <i class="fas fa-users"></i> Passenger
+                                </span>
+                                <small class="text-muted d-block">10-15 halts, 1-2 hrs delay</small>
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <span class="badge bg-secondary p-2 w-100">
+                                    <i class="fas fa-boxes"></i> Freight
+                                </span>
+                                <small class="text-muted d-block">Unlimited halts</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white mt-5 py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>IRTOMS Railway Management</h5>
+                    <p>Intelligent Railway Traffic Optimization and Management System</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <p>&copy; 2024 Railway Management System. All rights reserved.</p>
+                    <p>
+                        <i class="fas fa-shield-alt"></i> Secure &bull; 
+                        <i class="fas fa-clock"></i> Real-time &bull; 
+                        <i class="fas fa-cogs"></i> Intelligent
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Leaflet JS for Maps -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- Socket.IO for real-time updates -->
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- Railway Map Component -->
+    <script src="/js/railway-map.js"></script>
+    <script src="/js/main.js"></script>
+    
+    <script>
+        // Global railway map instance
+        let railwayMap;
+        
+        // Initialize map when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                railwayMap = new IRTOMSRailwayMap('railwayMap', {
+                    center: [20.5937, 78.9629], // Center of India
+                    zoom: 5,
+                    showControls: true
+                });
+                
+                updateStationCount();
+                console.log('Railway map initialized on homepage');
+            }, 1000);
+        });
+        
+        // Demo trains function
+        function demoTrains() {
+            if (!railwayMap) return;
+            
+            // Clear existing demo trains
+            railwayMap.clearAllTrains();
+            
+            // Add sample trains with realistic Indian routes
+            const demoTrains = [
+                {
+                    id: 'T1',
+                    number: '12951',
+                    name: 'Mumbai Rajdhani Express',
+                    type: 'VIP',
+                    position: { lat: 19.0760, lng: 72.8777 }, // Mumbai
+                    status: 'RUNNING',
+                    speed: 130
+                },
+                {
+                    id: 'T2', 
+                    number: '20001',
+                    name: 'Vande Bharat Express',
+                    type: 'VIP',
+                    position: { lat: 28.6139, lng: 77.2090 }, // New Delhi
+                    status: 'RUNNING',
+                    speed: 160
+                },
+                {
+                    id: 'T3',
+                    number: '12345',
+                    name: 'Howrah Superfast',
+                    type: 'SUPERFAST_EXPRESS',
+                    position: { lat: 22.5726, lng: 88.3639 }, // Kolkata
+                    status: 'RUNNING',
+                    speed: 120
+                },
+                {
+                    id: 'T4',
+                    number: '12622',
+                    name: 'Chennai Express',
+                    type: 'EXPRESS',
+                    position: { lat: 13.0827, lng: 80.2707 }, // Chennai
+                    status: 'RUNNING',
+                    speed: 100
+                },
+                {
+                    id: 'T5',
+                    number: '56789',
+                    name: 'Bangalore Passenger',
+                    type: 'PASSENGER',
+                    position: { lat: 12.9716, lng: 77.5946 }, // Bangalore
+                    status: 'RUNNING',
+                    speed: 60
+                },
+                {
+                    id: 'T6',
+                    number: '98765',
+                    name: 'Freight Express',
+                    type: 'FREIGHT',
+                    position: { lat: 21.1458, lng: 79.0882 }, // Nagpur
+                    status: 'RUNNING',
+                    speed: 45
+                }
+            ];
+            
+            // Add trains to map
+            demoTrains.forEach(train => {
+                railwayMap.addTrain(train);
+            });
+            
+            updateTrainCount();
+            
+            // Simulate train movement
+            simulateTrainMovement();
+            
+            IRTOMS.showNotification('Demo trains added to map!', 'success');
+        }
+        
+        // Clear trains function
+        function clearTrains() {
+            if (!railwayMap) return;
+            
+            railwayMap.clearAllTrains();
+            updateTrainCount();
+            
+            IRTOMS.showNotification('All trains cleared from map', 'info');
+        }
+        
+        // Simulate train movement
+        function simulateTrainMovement() {
+            if (!railwayMap) return;
+            
+            const trains = railwayMap.getAllTrains();
+            
+            trains.forEach(train => {
+                // Simulate movement every 3 seconds
+                setInterval(() => {
+                    const currentPos = train.position;
+                    const newLat = currentPos.lat + (Math.random() - 0.5) * 0.1;
+                    const newLng = currentPos.lng + (Math.random() - 0.5) * 0.1;
+                    const newSpeed = Math.max(20, train.speed + (Math.random() - 0.5) * 20);
+                    
+                    railwayMap.updateTrainPosition(train.id, 
+                        { lat: newLat, lng: newLng }, 
+                        newSpeed, 
+                        'RUNNING'
+                    );
+                }, 3000 + Math.random() * 2000);
+            });
+        }
+        
+        // Update counters
+        function updateStationCount() {
+            if (!railwayMap) return;
+            const count = railwayMap.getAllStations().length;
+            document.getElementById('stationCount').textContent = count;
+        }
+        
+        function updateTrainCount() {
+            if (!railwayMap) return;
+            const count = railwayMap.getAllTrains().length;
+            document.getElementById('trainCount').textContent = count;
+        }
+    </script>
+</body>
+</html>
