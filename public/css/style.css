@@ -374,14 +374,38 @@ body::before {
 
 /* Hero Cards */
 .card.bg-transparent {
-    background-color: rgba(255,255,255,0.1) !important;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.2);
+    background-color: rgba(255,255,255,0.15) !important;
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.3);
 }
 
 .card.bg-transparent:hover {
-    background-color: rgba(255,255,255,0.2) !important;
+    background-color: rgba(255,255,255,0.25) !important;
     transform: translateY(-3px);
+}
+
+/* Enhanced Hero Card Buttons */
+.card.bg-transparent .btn-light {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+    border: 2px solid rgba(139, 92, 246, 0.3) !important;
+    color: var(--primary-color) !important;
+    font-weight: 700 !important;
+    padding: 0.875rem 2rem !important;
+    border-radius: 12px !important;
+    transition: var(--transition-smooth) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+    position: relative;
+    z-index: 10;
+}
+
+.card.bg-transparent .btn-light:hover {
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%) !important;
+    color: white !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    transform: translateY(-4px) scale(1.05) !important;
+    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4) !important;
 }
 
 .btn-light {
@@ -1305,3 +1329,46 @@ p, .lead {
         height: 400px;
     }
 }
+
+/* ==============================
+   Professional Theme Overrides
+   ============================== */
+:root {
+    /* Professional deep blue + teal palette */
+    --primary-color: #0b132b;     /* Deep navy */
+    --secondary-color: #1c2541;   /* Slate blue */
+    --accent-color: #14b8a6;      /* Teal (attractive, professional) */
+    --light-color: #e5e7eb;       /* Light gray */
+    --dark-color: #e2e8f0;        /* Text on dark */
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #0b132b 0%, #1c2541 100%);
+    --gradient-accent: linear-gradient(135deg, #22d3ee 0%, #14b8a6 100%);
+    --gradient-surface: linear-gradient(135deg, #0f172a 0%, #111827 100%);
+}
+
+/* Minimal, professional background (no heavy animation) */
+body {
+    background: radial-gradient(1200px 600px at 20% -20%, rgba(20,184,166,0.12), transparent 60%),
+                radial-gradient(1000px 500px at 120% 20%, rgba(56,189,248,0.10), transparent 60%),
+                #0b132b !important;
+}
+
+/* Remove heavy global animations */
+body::before { animation: none !important; opacity: 0.12 !important; }
+.feature-card::after { display: none !important; animation: none !important; opacity: 0 !important; }
+
+/* Ensure hero card content and buttons are clearly visible */
+.card.bg-transparent .card-title { color: #e2e8f0 !important; }
+.card.bg-transparent .card-text { color: #94a3b8 !important; }
+.card.bg-transparent .btn-light { display: inline-block !important; }
+
+/* Calmer navbar styling (no shine) already applied; ensure text stays upright */
+.navbar-brand, .navbar-brand i { transform: none !important; }
+
+/* Button focus/hover accessibility */
+.btn-light:focus { box-shadow: 0 0 0 0.25rem rgba(20,184,166,0.35) !important; }
+
+/* Outline buttons to match theme */
+.btn-outline-primary { border-color: var(--accent-color) !important; color: var(--accent-color) !important; }
+.btn-outline-primary:hover { background: var(--gradient-accent) !important; color: #0b132b !important; }
