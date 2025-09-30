@@ -316,23 +316,91 @@ class IRTOMSRailwayMap {
     }
     
     /**
-     * Draw route between stations
+     * Draw realistic railway route between stations
      */
     drawRoute(stations, options = {}) {
         const coordinates = stations.map(station => [station.lat, station.lng]);
         
         const routeOptions = {
             color: options.color || '#007bff',
-            weight: options.weight || 4,
-            opacity: options.opacity || 0.7,
-            dashArray: options.dashArray || null,
+            weight: options.weight || 5,
+            opacity: options.opacity || 0.9,
+            smoothFactor: 1.0,
+            className: 'railway-track',
             ...options
         };
         
+        // Create the main railway line
         const polyline = L.polyline(coordinates, routeOptions);
         this.routeLayer.addLayer(polyline);
         
+        // Add railway track sleepers effect (darker border)
+        if (options.showTrackDetails !== false) {
+            const trackBorder = L.polyline(coordinates, {
+                color: '#2c3e50',
+                weight: (options.weight || 5) + 2,
+                opacity: 0.5,
+                smoothFactor: 1.0,
+                dashArray: '8, 4'
+            });
+            this.routeLayer.addLayer(trackBorder);
+            polyline.bringToFront();
+        }
+        
         return polyline;
+    }
+    
+    /**
+     * Draw realistic railway track with intermediate stations
+     */
+    drawRailwayTrack(trackData) {
+        const { coordinates, name, color = '#007bff', type = 'MAIN_LINE' } = trackData;
+        
+        // Define track styles based on type
+        const trackStyles = {
+            'MAIN_LINE': { weight: 6, color: color, opacity: 0.9 },
+            'BRANCH_LINE': { weight: 4, color: color, opacity: 0.8 },
+            'YARD_LINE': { weight: 3, color: '#6c757d', opacity: 0.7, dashArray: '5, 5' },
+            'ELECTRIFIED': { weight: 6, color: color, opacity: 1.0 },
+            'NON_ELECTRIFIED': { weight: 5, color: color, opacity: 0.8, dashArray: '10, 3' }
+        };
+        
+        const style = trackStyles[type] || trackStyles['MAIN_LINE'];
+        
+        // Create track foundation (sleepers)
+        const foundation = L.polyline(coordinates, {
+            color: '#2c3e50',
+            weight: style.weight + 2,
+            opacity: 0.4,
+            smoothFactor: 1.0
+        });
+        this.routeLayer.addLayer(foundation);
+        
+        // Create main track
+        const track = L.polyline(coordinates, {
+            ...style,
+            smoothFactor: 1.0,
+            className: `railway-${type.toLowerCase().replace('_', '-')}`
+        });
+        this.routeLayer.addLayer(track);
+        
+        // Add track name label at midpoint if provided
+        if (name && coordinates.length >= 2) {
+            const midIndex = Math.floor(coordinates.length / 2);
+            const midPoint = coordinates[midIndex];
+            
+            const trackLabel = L.marker(midPoint, {
+                icon: L.divIcon({
+                    className: 'track-label',
+                    html: `<div class="track-name">${name}</div>`,
+                    iconSize: [120, 20],
+                    iconAnchor: [60, 10]
+                })
+            });
+            this.routeLayer.addLayer(trackLabel);
+        }
+        
+        return { foundation, track };
     }
     
     /**

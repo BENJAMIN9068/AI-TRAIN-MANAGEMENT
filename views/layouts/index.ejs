@@ -11,12 +11,17 @@
     <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
+    <!-- Theme Toggle Button -->
+    <div class="theme-toggle" onclick="toggleTheme()" title="Switch Theme">
+        <i class="fas fa-moon" id="theme-icon"></i>
+    </div>
+    
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="/">
                 <i class="fas fa-train mr-2"></i>
-                IRTOMS Railway Management
+                AI POWERED TRAIN TRAFFIC MANAGEMENT SYSTEM
             </a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -85,14 +90,14 @@
                             <div class="card bg-transparent border-light">
                                 <div class="card-body">
                                     <h5 class="card-title">
-                                        <i class="fas fa-users"></i> Staff Portal
+                                        <i class="fas fa-users"></i> Login as Staff
                                     </h5>
                                     <p class="card-text">
-                                        Driver interface for train registration, journey management, 
-                                        and real-time position tracking.
+                                        Railway staff login for train registration, journey management, 
+                                        and real-time position tracking access.
                                     </p>
-                                    <a href="/staff" class="btn btn-light">
-                                        <i class="fas fa-arrow-right"></i> Access Staff Portal
+                                    <a href="/login" class="btn btn-light">
+                                        <i class="fas fa-sign-in-alt"></i> Staff Login
                                     </a>
                                 </div>
                             </div>
@@ -101,14 +106,14 @@
                             <div class="card bg-transparent border-light">
                                 <div class="card-body">
                                     <h5 class="card-title">
-                                        <i class="fas fa-cogs"></i> Admin Control Panel
+                                        <i class="fas fa-cogs"></i> Login as Admin
                                     </h5>
                                     <p class="card-text">
-                                        Master control center for traffic management, emergency controls, 
-                                        and system-wide monitoring.
+                                        Administrator login for master control, traffic management, 
+                                        emergency controls, and system-wide monitoring.
                                     </p>
-                                    <a href="/admin" class="btn btn-light">
-                                        <i class="fas fa-arrow-right"></i> Access Admin Panel
+                                    <a href="/login" class="btn btn-light">
+                                        <i class="fas fa-sign-in-alt"></i> Admin Login
                                     </a>
                                 </div>
                             </div>
@@ -302,8 +307,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <h5>IRTOMS Railway Management</h5>
-                    <p>Intelligent Railway Traffic Optimization and Management System</p>
+                    <h5>AI POWERED TRAIN TRAFFIC MANAGEMENT</h5>
+                    <p>Advanced AI-Driven Railway Traffic Optimization System</p>
                 </div>
                 <div class="col-md-6 text-end">
                     <p>&copy; 2024 Railway Management System. All rights reserved.</p>
@@ -328,6 +333,39 @@
     <script src="/js/main.js"></script>
     
     <script>
+        // Theme Toggle Functionality
+        function toggleTheme() {
+            const root = document.documentElement;
+            const themeIcon = document.getElementById('theme-icon');
+            const currentTheme = root.getAttribute('data-theme');
+            
+            if (currentTheme === 'dark') {
+                root.removeAttribute('data-theme');
+                themeIcon.className = 'fas fa-moon';
+                localStorage.setItem('theme', 'light');
+            } else {
+                root.setAttribute('data-theme', 'dark');
+                themeIcon.className = 'fas fa-sun';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+        
+        // Initialize theme on page load
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeIcon = document.getElementById('theme-icon');
+            
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeIcon.className = 'fas fa-sun';
+            } else {
+                themeIcon.className = 'fas fa-moon';
+            }
+        }
+        
+        // Initialize theme when DOM loads
+        document.addEventListener('DOMContentLoaded', initTheme);
+        
         // Global railway map instance
         let railwayMap;
         

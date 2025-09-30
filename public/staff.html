@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Portal - AI POWERED TRAIN TRAFFIC MANAGEMENT SYSTEM</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Theme Toggle Button -->
+    <div class="theme-toggle" onclick="toggleTheme()" title="Switch Theme">
+        <i class="fas fa-moon" id="theme-icon"></i>
+    </div>
+    
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/staff.html">
+                <i class="fas fa-train mr-2"></i>
+                AI POWERED STAFF PORTAL
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/staff.html">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/staff.html">
+                            <i class="fas fa-route"></i> My Routes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/staff.html">
+                            <i class="fas fa-clipboard-list"></i> Reports
+                        </a>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user"></i>
+                            <span id="staffName">Staff Member</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="/index.html" onclick="logout()">
+                                    <i class="fas fa-sign-out-alt"></i> Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+        <!-- Welcome Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4><i class="fas fa-user"></i> Staff Portal Dashboard</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle"></i>
+                            <strong>Welcome Railway Staff!</strong> You have successfully logged in to the Staff Portal.
+                        </div>
+                        <p>Access your assigned routes, report incidents, and manage your daily operations.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="row mt-4">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card stats-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-route fa-3x mb-3"></i>
+                        <h3>3</h3>
+                        <p>Assigned Routes</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card stats-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-clock fa-3x mb-3"></i>
+                        <h3>8</h3>
+                        <p>Hours on Duty</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card stats-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-check fa-3x mb-3"></i>
+                        <h3>12</h3>
+                        <p>Tasks Completed</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card stats-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-bell fa-3x mb-3"></i>
+                        <h3>2</h3>
+                        <p>New Notifications</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard Content -->
+        <div class="row mt-4">
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-tasks"></i> Today's Tasks</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group">
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <span><i class="fas fa-train"></i> Check Train 12345 Status</span>
+                                <span class="badge bg-warning">Pending</span>
+                            </div>
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <span><i class="fas fa-map-marker-alt"></i> Station Inspection - Platform 3</span>
+                                <span class="badge bg-success">Completed</span>
+                            </div>
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <span><i class="fas fa-clipboard"></i> Submit Daily Report</span>
+                                <span class="badge bg-info">In Progress</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-info-circle"></i> Quick Actions</h5>
+                    </div>
+                    <div class="card-body">
+                        <button class="btn btn-primary me-2 mb-2">
+                            <i class="fas fa-plus"></i> Report Incident
+                        </button>
+                        <button class="btn btn-success me-2 mb-2">
+                            <i class="fas fa-check"></i> Mark Task Complete
+                        </button>
+                        <button class="btn btn-info me-2 mb-2">
+                            <i class="fas fa-map"></i> View Route Map
+                        </button>
+                        <button class="btn btn-warning mb-2">
+                            <i class="fas fa-phone"></i> Contact Control
+                        </button>
+                        <button class="btn btn-success me-2 mb-2" onclick="openTrafficControl()">
+                            <i class="fas fa-traffic-light"></i> AI Traffic Control
+                        </button>
+                        <button class="btn btn-primary mb-2" onclick="showStartJourneyModal()">
+                            <i class="fas fa-play"></i> Start Journey
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schedule Information -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-calendar"></i> Today's Schedule</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>Train</th>
+                                        <th>Route</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>09:00 AM</td>
+                                        <td>12345 Express</td>
+                                        <td>Delhi - Mumbai</td>
+                                        <td><span class="badge bg-success">On Time</span></td>
+                                        <td><button class="btn btn-sm btn-primary">View</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>11:30 AM</td>
+                                        <td>67890 Local</td>
+                                        <td>Mumbai - Pune</td>
+                                        <td><span class="badge bg-warning">Delayed</span></td>
+                                        <td><button class="btn btn-sm btn-primary">View</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>02:15 PM</td>
+                                        <td>54321 Superfast</td>
+                                        <td>Pune - Bangalore</td>
+                                        <td><span class="badge bg-info">Scheduled</span></td>
+                                        <td><button class="btn btn-sm btn-primary">View</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white mt-5 py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>AI POWERED TRAIN TRAFFIC MANAGEMENT</h5>
+                    <p>Railway Staff Portal</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <p>&copy; 2024 Railway Management System. All rights reserved.</p>
+                    <p>
+                        <i class="fas fa-shield-alt"></i> Secure Staff Portal
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Start Journey Modal -->
+    <div class="modal fade" id="startJourneyModal" tabindex="-1" aria-labelledby="startJourneyModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="startJourneyModalLabel">
+                        <i class="fas fa-play"></i> Start New Journey
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="startJourneyForm">
+                        <div class="row">
+                            <!-- Train Information -->
+                            <div class="col-md-6">
+                                <h6 class="mb-3"><i class="fas fa-train"></i> Train Information</h6>
+                                
+                                <!-- Train Type -->
+                                <div class="mb-3">
+                                    <label for="trainType" class="form-label">Train Type *</label>
+                                    <select class="form-select" id="trainType" required onchange="handleTrainTypeChange()">
+                                        <option value="">Select Train Type</option>
+                                        <option value="EXPRESS">Express</option>
+                                        <option value="SUPERFAST_EXPRESS">Superfast Express</option>
+                                        <option value="RAJDHANI">Rajdhani Express (VIP)</option>
+                                        <option value="SHATABDI">Shatabdi Express (VIP)</option>
+                                        <option value="VANDE_BHARAT">Vande Bharat Express</option>
+                                        <option value="PASSENGER">Passenger Train</option>
+                                        <option value="FREIGHT">Freight Train</option>
+                                        <option value="LOCAL">Local/Suburban</option>
+                                        <option value="SPECIAL">Special Service</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Train Name -->
+                                <div class="mb-3">
+                                    <label for="trainName" class="form-label">Train Name *</label>
+                                    <input type="text" class="form-control" id="trainName" placeholder="e.g., Mumbai Rajdhani Express" required>
+                                    <div class="form-text">Enter the official train name</div>
+                                </div>
+                                
+                                <!-- Train Number -->
+                                <div class="mb-3">
+                                    <label for="trainNumber" class="form-label">Train Number</label>
+                                    <input type="text" class="form-control" id="trainNumber" placeholder="e.g., 12951">
+                                    <div class="form-text">Optional for freight trains</div>
+                                </div>
+                                
+                                <!-- Driver Information -->
+                                <div class="mb-3">
+                                    <label for="driverName" class="form-label">Driver Name *</label>
+                                    <input type="text" class="form-control" id="driverName" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="driverLicense" class="form-label">Driver License Number *</label>
+                                    <input type="text" class="form-control" id="driverLicense" required>
+                                </div>
+                            </div>
+                            
+                            <!-- Route Planning -->
+                            <div class="col-md-6">
+                                <h6 class="mb-3"><i class="fas fa-route"></i> Route Planning</h6>
+                                
+                                <!-- Origin Station -->
+                                <div class="mb-3">
+                                    <label for="originStation" class="form-label">Origin Station *</label>
+                                    <input type="text" class="form-control" id="originStation" placeholder="e.g., New Delhi" required onchange="findRoutes()">
+                                    <div class="dropdown-menu" id="originDropdown"></div>
+                                </div>
+                                
+                                <!-- Destination Station -->
+                                <div class="mb-3">
+                                    <label for="destinationStation" class="form-label">Destination Station *</label>
+                                    <input type="text" class="form-control" id="destinationStation" placeholder="e.g., Mumbai Central" required onchange="findRoutes()">
+                                    <div class="dropdown-menu" id="destinationDropdown"></div>
+                                </div>
+                                
+                                <!-- Route Options -->
+                                <div class="mb-3" id="routeOptionsContainer" style="display: none;">
+                                    <label class="form-label">Available Routes *</label>
+                                    <div id="routeOptions">
+                                        <!-- Route options will be populated here -->
+                                    </div>
+                                </div>
+                                
+                                <!-- Via Stations -->
+                                <div class="mb-3">
+                                    <label for="viaStations" class="form-label">Via Stations</label>
+                                    <textarea class="form-control" id="viaStations" rows="3" placeholder="Enter intermediate stations separated by commas\ne.g., Gwalior, Jhansi, Bhopal, Nagpur"></textarea>
+                                    <div class="form-text">You can manually enter via stations or they will be auto-suggested based on selected route</div>
+                                </div>
+                                
+                                <!-- Departure Time -->
+                                <div class="mb-3">
+                                    <label for="departureTime" class="form-label">Scheduled Departure *</label>
+                                    <input type="datetime-local" class="form-control" id="departureTime" required>
+                                </div>
+                                
+                                <!-- Expected Duration -->
+                                <div class="mb-3">
+                                    <label for="expectedDuration" class="form-label">Expected Journey Duration (hours)</label>
+                                    <input type="number" class="form-control" id="expectedDuration" step="0.5" placeholder="Auto-calculated based on route">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Route Preview Section -->
+                        <div class="row mt-4" id="routePreview" style="display: none;">
+                            <div class="col-12">
+                                <h6><i class="fas fa-map-marked-alt"></i> Route Preview</h6>
+                                <div class="alert alert-info">
+                                    <div id="routeDetails">
+                                        <!-- Route details will be shown here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Additional Options -->
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <h6 class="mb-3"><i class="fas fa-cog"></i> Additional Options</h6>
+                                
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="highPriority">
+                                    <label class="form-check-label" for="highPriority">
+                                        High Priority Journey
+                                    </label>
+                                </div>
+                                
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="weatherAlert">
+                                    <label class="form-check-label" for="weatherAlert">
+                                        Enable Weather Alerts
+                                    </label>
+                                </div>
+                                
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="aiOptimization" checked>
+                                    <label class="form-check-label" for="aiOptimization">
+                                        Enable AI Route Optimization
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <h6 class="mb-3"><i class="fas fa-comments"></i> Additional Notes</h6>
+                                <textarea class="form-control" id="journeyNotes" rows="4" placeholder="Any special instructions or notes for this journey..."></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button type="button" class="btn btn-info" onclick="validateRoute()">
+                        <i class="fas fa-search"></i> Find Routes
+                    </button>
+                    <button type="button" class="btn btn-success" onclick="startJourney()">
+                        <i class="fas fa-play"></i> Start Journey
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Authentication Helper -->
+    <script src="/js/auth.js"></script>
+    
+    <script>
+        // Theme Toggle Functionality
+        function toggleTheme() {
+            const root = document.documentElement;
+            const themeIcon = document.getElementById('theme-icon');
+            const currentTheme = root.getAttribute('data-theme');
+            
+            if (currentTheme === 'dark') {
+                root.removeAttribute('data-theme');
+                themeIcon.className = 'fas fa-moon';
+                localStorage.setItem('theme', 'light');
+            } else {
+                root.setAttribute('data-theme', 'dark');
+                themeIcon.className = 'fas fa-sun';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+        
+        // Initialize theme on page load
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeIcon = document.getElementById('theme-icon');
+            
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeIcon.className = 'fas fa-sun';
+            } else {
+                themeIcon.className = 'fas fa-moon';
+            }
+        }
+        
+        // Check authentication using AuthManager
+        function checkAuth() {
+            if (!window.authManager.requireRole('staff')) {
+                return; // Redirect handled by requireRole
+            }
+            
+            // Update staff name
+            const user = window.authManager.getUser();
+            document.getElementById('staffName').textContent = user.fullName || 'Staff Member';
+            
+            // Initialize dashboard data
+            loadDashboardData();
+        }
+        
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                // This would normally fetch real data from APIs
+                console.log('Loading staff dashboard data...');
+                
+                // You can add real API calls here
+                // const response = await window.authManager.makeAuthenticatedRequest('/api/staff/dashboard');
+                // if (response) {
+                //     const data = await response.json();
+                //     updateDashboard(data);
+                // }
+                
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+                showNotification('Failed to load dashboard data', 'error');
+            }
+        }
+        
+        // Logout function (now uses AuthManager)
+        function logout() {
+            window.authManager.logout();
+        }
+        
+        function openTrafficControl() {
+            window.open('/traffic-control.html', '_blank');
+        }
+        
+        // Start Journey Modal Functions
+        function showStartJourneyModal() {
+            // Set default departure time to current time + 1 hour
+            const now = new Date();
+            now.setHours(now.getHours() + 1);
+            const defaultTime = now.toISOString().slice(0, 16);
+            document.getElementById('departureTime').value = defaultTime;
+            
+            // Clear previous data
+            document.getElementById('startJourneyForm').reset();
+            document.getElementById('departureTime').value = defaultTime;
+            document.getElementById('routeOptionsContainer').style.display = 'none';
+            document.getElementById('routePreview').style.display = 'none';
+            
+            // Show modal
+            const modal = new bootstrap.Modal(document.getElementById('startJourneyModal'));
+            modal.show();
+        }
+        
+        function handleTrainTypeChange() {
+            const trainType = document.getElementById('trainType').value;
+            const trainNumberField = document.getElementById('trainNumber');
+            const trainNameField = document.getElementById('trainName');
+            
+            // Make train number optional for freight trains
+            if (trainType === 'FREIGHT') {
+                trainNumberField.removeAttribute('required');
+                trainNumberField.placeholder = 'Optional for freight trains';
+                trainNameField.placeholder = 'e.g., Coal Freight, Container Express';
+            } else {
+                trainNumberField.setAttribute('required', '');
+                trainNumberField.placeholder = 'e.g., 12951';
+                trainNameField.placeholder = 'e.g., Mumbai Rajdhani Express';
+            }
+            
+            // Auto-suggest train names based on type
+            const suggestions = {
+                'RAJDHANI': 'Rajdhani Express',
+                'SHATABDI': 'Shatabdi Express',
+                'VANDE_BHARAT': 'Vande Bharat Express',
+                'SUPERFAST_EXPRESS': 'Superfast Express',
+                'EXPRESS': 'Express',
+                'PASSENGER': 'Passenger',
+                'LOCAL': 'Local',
+                'FREIGHT': 'Freight',
+                'SPECIAL': 'Special'
+            };
+            
+            if (suggestions[trainType] && !trainNameField.value) {
+                trainNameField.placeholder = `e.g., ${suggestions[trainType]}`;
+            }
+        }
+        
+        /**
+         * Enhanced Journey Management Functions
+         */
+
+        // Real-time station search with autocomplete
+        let stationSearchTimeout;
+        
+        function setupStationAutocomplete(inputId, dropdownId) {
+            const input = document.getElementById(inputId);
+            const dropdown = document.getElementById(dropdownId);
+            
+            input.addEventListener('input', function() {
+                const query = this.value.trim();
+                
+                if (query.length < 2) {
+                    dropdown.style.display = 'none';
+                    return;
+                }
+                
+                clearTimeout(stationSearchTimeout);
+                stationSearchTimeout = setTimeout(() => {
+                    searchStations(query, dropdown, input);
+                }, 300);
+            });
+            
+            // Hide dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.style.display = 'none';
+                }
+            });
+        }
+        
+        async function searchStations(query, dropdown, input) {
+            try {
+                const response = await window.authManager.makeAuthenticatedRequest(`/api/staff/search-stations?query=${encodeURIComponent(query)}`);
+                
+                if (response && response.ok) {
+                    const data = await response.json();
+                    if (data.success && data.data.stations) {
+                        displayStationSuggestions(data.data.stations, dropdown, input);
+                    }
+                }
+            } catch (error) {
+                console.error('Station search error:', error);
+                // Fallback to mock data
+                displayStationSuggestions(getMockStations(query), dropdown, input);
+            }
+        }
+        
+        function displayStationSuggestions(stations, dropdown, input) {
+            if (stations.length === 0) {
+                dropdown.style.display = 'none';
+                return;
+            }
+            
+            dropdown.innerHTML = '';
+            
+            stations.forEach(station => {
+                const item = document.createElement('button');
+                item.className = 'dropdown-item d-flex justify-content-between align-items-center';
+                item.type = 'button';
+                item.innerHTML = `
+                    <div>
+                        <strong>${station.name}</strong>
+                        <small class="text-muted d-block">${station.code} - ${station.city}</small>
+                    </div>
+                    <span class="badge bg-${station.importance === 'MAJOR' ? 'primary' : 'secondary'}">${station.zone}</span>
+                `;
+                
+                item.addEventListener('click', () => {
+                    input.value = station.code;
+                    input.setAttribute('data-station-name', station.name);
+                    input.setAttribute('data-station-code', station.code);
+                    dropdown.style.display = 'none';
+                    
+                    // Auto-trigger route search if both stations are selected
+                    const originInput = document.getElementById('originStation');
+                    const destInput = document.getElementById('destinationStation');
+                    
+                    if (originInput.value && destInput.value && originInput.value !== destInput.value) {
+                        findRoutes();
+                    }
+                });
+                
+                dropdown.appendChild(item);
+            });
+            
+            dropdown.style.display = 'block';
+        }
+        
+        function getMockStations(query) {
+            const mockStations = [
+                { code: 'NDLS', name: 'New Delhi', city: 'Delhi', zone: 'NR', importance: 'MAJOR' },
+                { code: 'BCT', name: 'Mumbai Central', city: 'Mumbai', zone: 'WR', importance: 'MAJOR' },
+                { code: 'MAS', name: 'Chennai Central', city: 'Chennai', zone: 'SR', importance: 'MAJOR' },
+                { code: 'HWH', name: 'Howrah Junction', city: 'Kolkata', zone: 'ER', importance: 'MAJOR' },
+                { code: 'LKO', name: 'Lucknow', city: 'Lucknow', zone: 'NER', importance: 'MAJOR' },
+                { code: 'BLR', name: 'Bangalore City', city: 'Bangalore', zone: 'SWR', importance: 'MAJOR' },
+                { code: 'PUNE', name: 'Pune Junction', city: 'Pune', zone: 'CR', importance: 'MAJOR' },
+                { code: 'ADI', name: 'Ahmedabad', city: 'Ahmedabad', zone: 'WR', importance: 'MAJOR' }
+            ];
+            
+            const queryLower = query.toLowerCase();
+            return mockStations.filter(station => 
+                station.name.toLowerCase().includes(queryLower) || 
+                station.code.toLowerCase().includes(queryLower) ||
+                station.city.toLowerCase().includes(queryLower)
+            );
+        }
+        
+        // Enhanced train number search with intelligent suggestions
+        let trainSearchTimeout;
+        
+        function setupTrainSearch() {
+            const trainNumberInput = document.getElementById('trainNumber');
+            const trainNameInput = document.getElementById('trainName');
+            
+            trainNumberInput.addEventListener('input', function() {
+                const query = this.value.trim();
+                
+                if (query.length < 2) return;
+                
+                clearTimeout(trainSearchTimeout);
+                trainSearchTimeout = setTimeout(() => {
+                    searchTrainByNumber(query, trainNameInput);
+                }, 300);
+            });
+        }
+        
+        async function searchTrainByNumber(trainNumber, trainNameInput) {
+            try {
+                const response = await window.authManager.makeAuthenticatedRequest(`/api/staff/search-trains?query=${encodeURIComponent(trainNumber)}`);
+                
+                if (response && response.ok) {
+                    const data = await response.json();
+                    if (data.success && data.data.trains && data.data.trains.length > 0) {
+                        const train = data.data.trains[0];
+                        trainNameInput.value = train.name;
+                        trainNameInput.style.backgroundColor = '#e8f5e8';
+                        
+                        setTimeout(() => {
+                            trainNameInput.style.backgroundColor = '';
+                        }, 2000);
+                        
+                        showNotification(`Found: ${train.name} (${train.type})`, 'info');
+                    }
+                }
+            } catch (error) {
+                console.error('Train search error:', error);
+            }
+        }
+        
+        async function findRoutes() {
+            const originInput = document.getElementById('originStation');
+            const destinationInput = document.getElementById('destinationStation');
+            
+            const origin = originInput.value.trim();
+            const destination = destinationInput.value.trim();
+            
+            if (!origin || !destination) {
+                return;
+            }
+            
+            // Show loading state
+            const routeOptionsContainer = document.getElementById('routeOptionsContainer');
+            const routeOptions = document.getElementById('routeOptions');
+            
+            routeOptions.innerHTML = '<div class="text-center py-3"><div class="spinner-border text-primary" role="status"></div><br><small>Finding optimal routes...</small></div>';
+            routeOptionsContainer.style.display = 'block';
+            
+            try {
+                console.log(`🔍 Searching routes from ${origin} to ${destination}`);
+                
+                const response = await window.authManager.makeAuthenticatedRequest(
+                    `/api/staff/find-routes?origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}`
+                );
+                
+                if (response && response.ok) {
+                    const data = await response.json();
+                    if (data.success && data.data.routes && data.data.routes.length > 0) {
+                        displayRouteOptions(data.data.routes, data.data);
+                        showNotification(`Found ${data.data.routes.length} route(s)`, 'success');
+                    } else {
+                        showNoRoutesFound(origin, destination, data.suggestions);
+                    }
+                } else {
+                    throw new Error('Route search failed');
+                }
+            } catch (error) {
+                console.error('Error finding routes:', error);
+                showRouteFallback(origin, destination);
+                showNotification('Using fallback route data', 'warning');
+            }
+        }
+        
+        function showNoRoutesFound(origin, destination, suggestions) {
+            const routeOptions = document.getElementById('routeOptions');
+            
+            let suggestionsHtml = '';
+            if (suggestions && (suggestions.origin || suggestions.destination)) {
+                suggestionsHtml = `
+                    <div class="mt-3">
+                        <h6>Did you mean?</h6>
+                        ${suggestions.origin ? `<p><strong>Origin:</strong> ${suggestions.origin.map(s => `${s.name} (${s.code})`).join(', ')}</p>` : ''}
+                        ${suggestions.destination ? `<p><strong>Destination:</strong> ${suggestions.destination.map(s => `${s.name} (${s.code})`).join(', ')}</p>` : ''}
+                    </div>
+                `;
+            }
+            
+            routeOptions.innerHTML = `
+                <div class="alert alert-warning text-center">
+                    <i class="fas fa-exclamation-triangle fa-2x mb-2"></i>
+                    <h6>No Direct Routes Found</h6>
+                    <p>No direct routes available between <strong>${origin}</strong> and <strong>${destination}</strong></p>
+                    ${suggestionsHtml}
+                    <button class="btn btn-primary btn-sm mt-2" onclick="createCustomRoute('${origin}', '${destination}')">
+                        <i class="fas fa-plus"></i> Create Custom Route
+                    </button>
+                </div>
+            `;
+        }
+        
+        function showDefaultRoutes(origin, destination) {
+            // Demo route data for common Indian railway routes
+            const commonRoutes = {
+                'lucknow-delhi': [
+                    {
+                        id: 'LKO_NDLS_1',
+                        name: 'Via Bareilly Route',
+                        via: ['Lucknow', 'Sitapur', 'Lakhimpur', 'Bareilly', 'Moradabad', 'Ghaziabad', 'New Delhi'],
+                        distance: 506,
+                        duration: 6.5,
+                        description: 'Shorter route via Bareilly - faster for express trains'
+                    },
+                    {
+                        id: 'LKO_NDLS_2', 
+                        name: 'Via Kanpur Route',
+                        via: ['Lucknow', 'Kanpur Central', 'Etawah', 'Tundla', 'Agra', 'Mathura', 'New Delhi'],
+                        distance: 520,
+                        duration: 7,
+                        description: 'Traditional route via Kanpur - more stations'
+                    }
+                ],
+                'delhi-mumbai': [
+                    {
+                        id: 'NDLS_CSTM_1',
+                        name: 'Western Railway Route',
+                        via: ['New Delhi', 'Rewari', 'Jaipur', 'Ajmer', 'Abu Road', 'Ahmedabad', 'Vadodara', 'Surat', 'Mumbai Central'],
+                        distance: 1384,
+                        duration: 16,
+                        description: 'Western Railway main line - scenic route'
+                    },
+                    {
+                        id: 'NDLS_CSTM_2',
+                        name: 'Central Railway Route',
+                        via: ['New Delhi', 'Agra', 'Gwalior', 'Jhansi', 'Bhopal', 'Nagpur', 'Mumbai CST'],
+                        distance: 1367,
+                        duration: 15.5,
+                        description: 'Central Railway route - faster for long distance'
+                    }
+                ],
+                'mumbai-pune': [
+                    {
+                        id: 'CSTM_PUNE_1',
+                        name: 'Main Line via Lonavala',
+                        via: ['Mumbai CST', 'Dadar', 'Kalyan', 'Karjat', 'Lonavala', 'Pune'],
+                        distance: 192,
+                        duration: 3,
+                        description: 'Scenic ghat section via Lonavala'
+                    }
+                ]
+            };
+            
+            // Generate route key from origin-destination
+            const routeKey = `${origin.toLowerCase().replace(/\s+/g, '')}-${destination.toLowerCase().replace(/\s+/g, '')}`;
+            const routes = commonRoutes[routeKey] || [];
+            
+            if (routes.length === 0) {
+                // Generate a default route
+                routes.push({
+                    id: 'DEFAULT_ROUTE',
+                    name: 'Direct Route',
+                    via: [origin, destination],
+                    distance: 500,
+                    duration: 8,
+                    description: 'Direct route between selected stations'
+                });
+            }
+            
+            displayRouteOptions(routes);
+        }
+        
+        function showRouteFallback(origin, destination) {
+            // Generate fallback route data
+            const fallbackRoutes = generateFallbackRoutes(origin, destination);
+            displayRouteOptions(fallbackRoutes, { originStation: { name: origin }, destinationStation: { name: destination } });
+        }
+        
+        function generateFallbackRoutes(origin, destination) {
+            const distance = Math.floor(Math.random() * 800) + 200;
+            const duration = Math.round((distance / 65) * 10) / 10; // Assuming 65 km/h average
+            
+            return [{
+                id: `FALLBACK_${Date.now()}`,
+                name: 'Direct Route (Estimated)',
+                stations: [origin, destination],
+                stationsDetails: [
+                    { code: origin, name: origin },
+                    { code: destination, name: destination }
+                ],
+                distance: distance,
+                estimatedTime: duration,
+                type: 'SUGGESTED',
+                applicableTrains: []
+            }];
+        }
+        
+        function createCustomRoute(origin, destination) {
+            // Auto-populate form with custom route
+            document.getElementById('viaStations').value = `${origin}, ${destination}`;
+            document.getElementById('expectedDuration').value = Math.round((Math.random() * 12) + 4); // 4-16 hours
+            
+            showNotification('Custom route created. Please fill in additional details.', 'info');
+            
+            // Hide route options since we're creating custom
+            document.getElementById('routeOptionsContainer').style.display = 'none';
+        }
+        
+        function displayRouteOptions(routes, routeData) {
+            const container = document.getElementById('routeOptions');
+            const routeOptionsContainer = document.getElementById('routeOptionsContainer');
+            
+            container.innerHTML = '';
+            
+            routes.forEach((route, index) => {
+                // Handle different route data formats
+                const stations = route.stationsDetails || route.stations || [];
+                const stationNames = stations.map(s => s.name || s.code || s).filter(Boolean);
+                const applicableTrains = route.applicableTrains || [];
+                
+                const routeTypeClass = {
+                    'MAIN_LINE': 'success',
+                    'SUGGESTED': 'info',
+                    'DIRECT_SUGGESTED': 'warning'
+                }[route.type] || 'primary';
+                
+                const routeHtml = `
+                    <div class="form-check mb-3 p-3 border rounded bg-light">
+                        <input class="form-check-input" type="radio" name="selectedRoute" id="route_${route.id}" value="${route.id}" ${index === 0 ? 'checked' : ''} onchange="updateRoutePreview('${route.id}')">
+                        <label class="form-check-label w-100" for="route_${route.id}">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <h6 class="mb-0 me-2">${route.name}</h6>
+                                        <span class="badge bg-${routeTypeClass}">${route.type || 'ROUTE'}</span>
+                                    </div>
+                                    <p class="mb-2 text-muted small">${stationNames.join(' → ')}</p>
+                                    ${applicableTrains.length > 0 ? `
+                                        <div class="mb-2">
+                                            <small class="text-success">
+                                                <i class="fas fa-train"></i> ${applicableTrains.length} applicable train(s): 
+                                                ${applicableTrains.slice(0, 2).map(t => `${t.number} ${t.name}`).join(', ')}
+                                                ${applicableTrains.length > 2 ? ` +${applicableTrains.length - 2} more` : ''}
+                                            </small>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="small text-muted">
+                                        <div><i class="fas fa-road"></i> <strong>${route.distance || 'N/A'} km</strong></div>
+                                        <div><i class="fas fa-clock"></i> <strong>~${route.estimatedTime || route.duration || 'N/A'} hrs</strong></div>
+                                        <div><i class="fas fa-stop"></i> ${stations.length > 2 ? (stations.length - 2) + ' stops' : 'Direct'}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                `;
+                container.innerHTML += routeHtml;
+            });
+            
+            // Store routes data for later use
+            window.availableRoutes = routes;
+            window.routeData = routeData;
+            
+            // Show route options
+            routeOptionsContainer.style.display = 'block';
+            
+            // Auto-select first route
+            if (routes.length > 0) {
+                updateRoutePreview(routes[0].id);
+            }
+        }
+        
+        function updateRoutePreview(routeId) {
+            if (!window.availableRoutes) return;
+            
+            const route = window.availableRoutes.find(r => r.id === routeId);
+            if (!route) return;
+            
+            // Update via stations
+            document.getElementById('viaStations').value = route.via.slice(1, -1).join(', ');
+            
+            // Update expected duration
+            document.getElementById('expectedDuration').value = route.duration;
+            
+            // Show route preview
+            const previewContainer = document.getElementById('routePreview');
+            const routeDetails = document.getElementById('routeDetails');
+            
+            routeDetails.innerHTML = `
+                <div class="row">
+                    <div class="col-md-8">
+                        <h6>${route.name}</h6>
+                        <p><strong>Route:</strong> ${route.via.join(' → ')}</p>
+                        <p><strong>Description:</strong> ${route.description}</p>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <p><strong>Distance:</strong> ${route.distance} km</p>
+                        <p><strong>Est. Duration:</strong> ${route.duration} hours</p>
+                        <p><strong>Avg. Speed:</strong> ${Math.round(route.distance / route.duration)} km/h</p>
+                    </div>
+                </div>
+            `;
+            
+            previewContainer.style.display = 'block';
+        }
+        
+        function validateRoute() {
+            const origin = document.getElementById('originStation').value.trim();
+            const destination = document.getElementById('destinationStation').value.trim();
+            
+            if (!origin || !destination) {
+                showNotification('Please enter both origin and destination stations', 'warning');
+                return;
+            }
+            
+            if (origin.toLowerCase() === destination.toLowerCase()) {
+                showNotification('Origin and destination cannot be the same', 'error');
+                return;
+            }
+            
+            findRoutes();
+        }
+        
+        // Enhanced journey creation with comprehensive validation and AI analysis
+        async function startJourney() {
+            const form = document.getElementById('startJourneyForm');
+            
+            // Enhanced validation
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            // Collect and validate form data
+            const selectedRoute = document.querySelector('input[name="selectedRoute"]:checked');
+            const originStation = document.getElementById('originStation').value.trim();
+            const destinationStation = document.getElementById('destinationStation').value.trim();
+            const trainType = document.getElementById('trainType').value;
+            const trainName = document.getElementById('trainName').value.trim();
+            const trainNumber = document.getElementById('trainNumber').value.trim();
+            const departureTime = document.getElementById('departureTime').value;
+            
+            // Advanced validation
+            const validationErrors = [];
+            
+            if (!originStation || !destinationStation) {
+                validationErrors.push('Origin and destination stations are required');
+            }
+            
+            if (originStation === destinationStation) {
+                validationErrors.push('Origin and destination cannot be the same');
+            }
+            
+            if (!selectedRoute && !document.getElementById('viaStations').value.trim()) {
+                validationErrors.push('Please select a route or enter via stations');
+            }
+            
+            if (trainType !== 'FREIGHT' && !trainNumber) {
+                validationErrors.push('Train number is required for non-freight trains');
+            }
+            
+            if (!trainName || trainName.length < 3) {
+                validationErrors.push('Train name must be at least 3 characters long');
+            }
+            
+            const departureDate = new Date(departureTime);
+            const now = new Date();
+            if (departureDate < now) {
+                validationErrors.push('Departure time cannot be in the past');
+            }
+            
+            if (validationErrors.length > 0) {
+                showNotification('Validation Error: ' + validationErrors.join(', '), 'error');
+                return;
+            }
+            
+            const journeyData = {
+                trainType: trainType,
+                trainName: trainName,
+                trainNumber: trainNumber || null,
+                driverName: document.getElementById('driverName').value.trim(),
+                driverLicense: document.getElementById('driverLicense').value.trim(),
+                originStation: originStation.toUpperCase(),
+                destinationStation: destinationStation.toUpperCase(),
+                selectedRoute: selectedRoute ? selectedRoute.value : null,
+                viaStations: document.getElementById('viaStations').value.trim(),
+                departureTime: departureTime,
+                expectedDuration: parseFloat(document.getElementById('expectedDuration').value) || null,
+                highPriority: document.getElementById('highPriority').checked,
+                weatherAlert: document.getElementById('weatherAlert').checked,
+                aiOptimization: document.getElementById('aiOptimization').checked,
+                journeyNotes: document.getElementById('journeyNotes').value.trim()
+            };
+            
+            // Show loading state
+            const submitButton = document.querySelector('.modal-footer .btn-success');
+            const originalText = submitButton.innerHTML;
+            submitButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Creating Journey...';
+            submitButton.disabled = true;
+            
+            try {
+                console.log('🚆 Creating new journey:', journeyData);
+                
+                const response = await window.authManager.makeAuthenticatedRequest('/api/staff/create-journey', {
+                    method: 'POST',
+                    body: JSON.stringify(journeyData),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response && response.ok) {
+                    const result = await response.json();
+                    if (result.success) {
+                        showJourneyCreatedSuccess(result.data);
+                        
+                        // Close modal after a delay
+                        setTimeout(() => {
+                            const modal = bootstrap.Modal.getInstance(document.getElementById('startJourneyModal'));
+                            modal.hide();
+                            
+                            // Refresh dashboard
+                            loadDashboardData();
+                        }, 3000);
+                    } else {
+                        throw new Error(result.message || 'Failed to create journey');
+                    }
+                } else {
+                    const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
+                    throw new Error(errorData.message || `HTTP ${response.status}`);
+                }
+                
+            } catch (error) {
+                console.error('🚨 Journey creation error:', error);
+                
+                let errorMessage = 'Failed to create journey';
+                let errorDetails = error.message;
+                
+                if (error.message.includes('already in use')) {
+                    errorMessage = 'Train Number Conflict';
+                    errorDetails = 'This train number is already active. Please use a different number.';
+                } else if (error.message.includes('validation')) {
+                    errorMessage = 'Validation Error';
+                } else if (error.message.includes('route')) {
+                    errorMessage = 'Route Error';
+                    errorDetails = 'Invalid route selected. Please choose a different route.';
+                }
+                
+                showNotification(`${errorMessage}: ${errorDetails}`, 'error');
+                
+            } finally {
+                // Restore submit button
+                submitButton.innerHTML = originalText;
+                submitButton.disabled = false;
+            }
+        }
+        
+        function showJourneyCreatedSuccess(journeyData) {
+            const modalBody = document.querySelector('#startJourneyModal .modal-body');
+            
+            modalBody.innerHTML = `
+                <div class="text-center py-4">
+                    <div class="mb-4">
+                        <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+                    </div>
+                    <h4 class="text-success mb-3">Journey Created Successfully!</h4>
+                    
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <h6 class="card-title">${journeyData.trainName}</h6>
+                            <p class="card-text">
+                                <strong>Journey ID:</strong> ${journeyData.journeyId}<br>
+                                <strong>Train:</strong> ${journeyData.trainNumber || 'Custom'}<br>
+                                <strong>Route:</strong> ${journeyData.route.origin.code} → ${journeyData.route.destination.code}<br>
+                                <strong>Departure:</strong> ${new Date(journeyData.schedule.departureTime).toLocaleString()}<br>
+                                <strong>Estimated Duration:</strong> ${journeyData.schedule.estimatedDuration} hours<br>
+                                <strong>Distance:</strong> ${journeyData.route.distance} km
+                            </p>
+                            
+                            ${journeyData.aiRecommendations && journeyData.aiRecommendations.length > 0 ? `
+                                <div class="mt-3">
+                                    <h6 class="text-muted">AI Recommendations:</h6>
+                                    <ul class="list-unstyled small">
+                                        ${journeyData.aiRecommendations.slice(0, 3).map(rec => `
+                                            <li class="mb-1">
+                                                <span class="badge bg-${rec.priority === 'HIGH' ? 'danger' : rec.priority === 'MEDIUM' ? 'warning' : 'info'} me-2">${rec.priority}</span>
+                                                ${rec.suggestion}
+                                            </li>
+                                        `).join('')}
+                                    </ul>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                    
+                    <p class="text-muted mt-3">Journey details have been saved and will be available in your dashboard.</p>
+                </div>
+            `;
+            
+            showNotification('Journey created successfully!', 'success');
+        }
+        
+        // Notification system
+        function showNotification(message, type = 'info', duration = 5000) {
+            const alertClass = {
+                'success': 'alert-success',
+                'error': 'alert-danger', 
+                'warning': 'alert-warning',
+                'info': 'alert-info'
+            }[type] || 'alert-info';
+            
+            const alert = document.createElement('div');
+            alert.className = `alert ${alertClass} alert-dismissible fade show position-fixed`;
+            alert.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px; max-width: 400px;';
+            alert.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-triangle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'} me-2"></i>
+                    <div>${message}</div>
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            
+            document.body.appendChild(alert);
+            
+            // Auto-dismiss after duration
+            setTimeout(() => {
+                if (alert && alert.parentNode) {
+                    alert.classList.remove('show');
+                    setTimeout(() => alert.remove(), 150);
+                }
+            }, duration);
+        }
+        
+        function setupInputFormatting() {
+            // Format train number input (uppercase)
+            const trainNumberInput = document.getElementById('trainNumber');
+            if (trainNumberInput) {
+                trainNumberInput.addEventListener('input', function() {
+                    this.value = this.value.toUpperCase();
+                });
+            }
+            
+            // Format station inputs (uppercase on blur)
+            ['originStation', 'destinationStation'].forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.addEventListener('blur', function() {
+                        this.value = this.value.toUpperCase();
+                    });
+                }
+            });
+            
+            // Auto-calculate expected arrival time
+            const departureInput = document.getElementById('departureTime');
+            const durationInput = document.getElementById('expectedDuration');
+            
+            function updateArrivalTime() {
+                const departure = departureInput?.value;
+                const duration = parseFloat(durationInput?.value);
+                
+                if (departure && duration && duration > 0) {
+                    const departureDate = new Date(departure);
+                    const arrivalDate = new Date(departureDate.getTime() + (duration * 60 * 60 * 1000));
+                    
+                    // Show arrival time hint
+                    let hintElement = document.getElementById('arrivalTimeHint');
+                    if (!hintElement && durationInput) {
+                        hintElement = document.createElement('small');
+                        hintElement.id = 'arrivalTimeHint';
+                        hintElement.className = 'text-muted d-block mt-1';
+                        durationInput.parentNode.appendChild(hintElement);
+                    }
+                    
+                    if (hintElement) {
+                        hintElement.innerHTML = `<i class="fas fa-clock"></i> Estimated arrival: ${arrivalDate.toLocaleString()}`;
+                    }
+                }
+            }
+            
+            if (departureInput && durationInput) {
+                departureInput.addEventListener('change', updateArrivalTime);
+                durationInput.addEventListener('input', updateArrivalTime);
+            }
+        }
+        
+        // Initialize enhanced journey management on DOM load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚆 Initializing Enhanced Journey Management System');
+            
+            initTheme();
+            checkAuth();
+            
+            // Set up autocomplete for station inputs (only if elements exist)
+            if (document.getElementById('originStation') && document.getElementById('originDropdown')) {
+                setupStationAutocomplete('originStation', 'originDropdown');
+            }
+            if (document.getElementById('destinationStation') && document.getElementById('destinationDropdown')) {
+                setupStationAutocomplete('destinationStation', 'destinationDropdown');
+            }
+            
+            // Set up train number search
+            if (document.getElementById('trainNumber')) {
+                setupTrainSearch();
+            }
+            
+            // Add input formatting and validation
+            setupInputFormatting();
+            
+            console.log('✅ Journey Management System initialized');
+        });
+    </script>
+</body>
+</html>
