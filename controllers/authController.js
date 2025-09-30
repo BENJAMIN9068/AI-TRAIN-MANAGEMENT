@@ -23,7 +23,7 @@ const register = async (req, res) => {
       username,
       email,
       password,
-      role: role || 'driver',
+      role: role || 'staff',
       fullName,
       employeeId,
       phoneNumber

@@ -73,8 +73,11 @@ const authorizeRoles = (...roles) => {
 // Admin Only Access
 const adminOnly = authorizeRoles('admin');
 
-// Driver and Admin Access
-const driverAndAdmin = authorizeRoles('driver', 'admin');
+// Staff and Admin Access
+const staffAndAdmin = authorizeRoles('staff', 'admin');
+
+// Driver and Admin Access (legacy support)
+const driverAndAdmin = authorizeRoles('driver', 'staff', 'admin');
 
 // Session Authentication Middleware for Web Views
 const authenticateSession = (req, res, next) => {
@@ -121,6 +124,7 @@ module.exports = {
   authenticateToken,
   authorizeRoles,
   adminOnly,
+  staffAndAdmin,
   driverAndAdmin,
   authenticateSession,
   generateToken,

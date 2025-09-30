@@ -23,8 +23,8 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['driver', 'admin'],
-    default: 'driver',
+    enum: ['driver', 'staff', 'admin'],
+    default: 'staff',
     required: true
   },
   fullName: {

@@ -381,30 +381,43 @@
             loginBtn.disabled = true;
             
             try {
-                // Simulate login for demo purposes
-                const userData = {
-                    id: Date.now(),
-                    username: username,
-                    fullName: username.charAt(0).toUpperCase() + username.slice(1),
-                    role: role,
-                    email: username + '@railways.gov.in'
-                };
+                // Use real authentication API
+                const response = await fetch('/.netlify/functions/auth-login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
                 
-                // Store user data
-                sessionStorage.setItem('authToken', 'demo-token-' + Date.now());
-                sessionStorage.setItem('user', JSON.stringify(userData));
+                const data = await response.json();
                 
-                loginModal.hide();
-                showNotification('Login successful! Redirecting...', 'success');
-                
-                // Redirect to appropriate dashboard
-                setTimeout(() => {
-                    if (role === 'admin') {
-                        window.location.href = '/admin.html';
-                    } else if (role === 'staff') {
-                        window.location.href = '/staff.html';
+                if (data.success) {
+                    // Validate role matches user selection
+                    if (data.data.user.role !== role) {
+                        showNotification(`Invalid role. You are registered as ${data.data.user.role}`, 'error');
+                        return;
                     }
-                }, 1500);
+                    
+                    // Store authentication data
+                    sessionStorage.setItem('authToken', data.data.token);
+                    sessionStorage.setItem('user', JSON.stringify(data.data.user));
+                    
+                    loginModal.hide();
+                    showNotification('Login successful! Redirecting...', 'success');
+                    
+                    // Redirect to appropriate dashboard
+                    setTimeout(() => {
+                        if (data.data.user.role === 'admin') {
+                            window.location.href = '/admin.html';
+                        } else if (data.data.user.role === 'staff') {
+                            window.location.href = '/staff.html';
+                        }
+                    }, 1500);
+                    
+                } else {
+                    showNotification(data.message || 'Login failed', 'error');
+                }
                 
             } catch (error) {
                 console.error('Login error:', error);

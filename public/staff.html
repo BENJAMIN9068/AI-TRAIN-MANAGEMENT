@@ -242,6 +242,8 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Authentication Helper -->
+    <script src="/js/auth.js"></script>
     
     <script>
         // Theme Toggle Functionality
@@ -274,26 +276,42 @@
             }
         }
         
-        // Check authentication
+        // Check authentication using AuthManager
         function checkAuth() {
-            const token = sessionStorage.getItem('authToken');
-            const user = JSON.parse(sessionStorage.getItem('user') || 'null');
-            
-            if (!token || !user || user.role !== 'staff') {
-                alert('Access denied. Staff login required.');
-                window.location.href = '/index.html';
-                return;
+            if (!window.authManager.requireRole('staff')) {
+                return; // Redirect handled by requireRole
             }
             
             // Update staff name
+            const user = window.authManager.getUser();
             document.getElementById('staffName').textContent = user.fullName || 'Staff Member';
+            
+            // Initialize dashboard data
+            loadDashboardData();
         }
         
-        // Logout function
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                // This would normally fetch real data from APIs
+                console.log('Loading staff dashboard data...');
+                
+                // You can add real API calls here
+                // const response = await window.authManager.makeAuthenticatedRequest('/api/staff/dashboard');
+                // if (response) {
+                //     const data = await response.json();
+                //     updateDashboard(data);
+                // }
+                
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+                showNotification('Failed to load dashboard data', 'error');
+            }
+        }
+        
+        // Logout function (now uses AuthManager)
         function logout() {
-            sessionStorage.removeItem('authToken');
-            sessionStorage.removeItem('user');
-            window.location.href = '/index.html';
+            window.authManager.logout();
         }
         
         // Initialize when DOM loads

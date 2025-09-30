@@ -138,8 +138,11 @@
                         <button class="btn btn-warning me-2 mb-2">
                             <i class="fas fa-pause"></i> Pause System
                         </button>
-                        <button class="btn btn-danger mb-2">
+                        <button class="btn btn-danger me-2 mb-2" onclick="emergencyStop()">
                             <i class="fas fa-stop"></i> Emergency Stop
+                        </button>
+                        <button class="btn btn-info me-2 mb-2" onclick="showUserManagement()">
+                            <i class="fas fa-users"></i> Manage Users
                         </button>
                     </div>
                 </div>
@@ -168,6 +171,130 @@
         </div>
     </div>
 
+    <!-- User Management Modal -->
+    <div class="modal fade" id="userManagementModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">User Management</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Add New User Section -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h6>Add New Staff Member</h6>
+                        </div>
+                        <div class="card-body">
+                            <form id="addUserForm">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="newUsername" class="form-label">Username</label>
+                                        <input type="text" class="form-control" id="newUsername" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="newFullName" class="form-label">Full Name</label>
+                                        <input type="text" class="form-control" id="newFullName" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="newEmail" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="newEmail" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="newEmployeeId" class="form-label">Employee ID</label>
+                                        <input type="text" class="form-control" id="newEmployeeId" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="newPhoneNumber" class="form-label">Phone Number</label>
+                                        <input type="tel" class="form-control" id="newPhoneNumber" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="newPassword" class="form-label">Password</label>
+                                        <input type="password" class="form-control" id="newPassword" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="newRole" class="form-label">Role</label>
+                                        <select class="form-control" id="newRole" required>
+                                            <option value="staff">Staff</option>
+                                            <option value="admin">Admin</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-plus"></i> Add User
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Existing Users Section -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h6>Existing Users</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped" id="usersTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Username</th>
+                                            <th>Full Name</th>
+                                            <th>Email</th>
+                                            <th>Role</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>BCS2024261</td>
+                                            <td>IRTOMS Administrator</td>
+                                            <td>admin@irtoms.railway.gov.in</td>
+                                            <td><span class="badge bg-danger">Admin</span></td>
+                                            <td><span class="badge bg-success">Active</span></td>
+                                            <td>-</td>
+                                        </tr>
+                                        <tr>
+                                            <td>BCS2024200</td>
+                                            <td>Railway Staff BCS2024200</td>
+                                            <td>BCS2024200@irtoms.railway.gov.in</td>
+                                            <td><span class="badge bg-primary">Staff</span></td>
+                                            <td><span class="badge bg-success">Active</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-warning">Edit</button>
+                                                <button class="btn btn-sm btn-secondary">Disable</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>BCS2024300</td>
+                                            <td>Railway Staff BCS2024300</td>
+                                            <td>BCS2024300@irtoms.railway.gov.in</td>
+                                            <td><span class="badge bg-primary">Staff</span></td>
+                                            <td><span class="badge bg-success">Active</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-warning">Edit</button>
+                                                <button class="btn btn-sm btn-secondary">Disable</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="bg-dark text-white mt-5 py-4">
         <div class="container">
@@ -188,6 +315,8 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Authentication Helper -->
+    <script src="/js/auth.js"></script>
     
     <script>
         // Theme Toggle Functionality
@@ -220,32 +349,107 @@
             }
         }
         
-        // Check authentication
+        // Check authentication using AuthManager
         function checkAuth() {
-            const token = sessionStorage.getItem('authToken');
-            const user = JSON.parse(sessionStorage.getItem('user') || 'null');
-            
-            if (!token || !user || user.role !== 'admin') {
-                alert('Access denied. Admin login required.');
-                window.location.href = '/index.html';
-                return;
+            if (!window.authManager.requireRole('admin')) {
+                return; // Redirect handled by requireRole
             }
             
             // Update admin name
+            const user = window.authManager.getUser();
             document.getElementById('adminName').textContent = user.fullName || 'Administrator';
+            
+            // Initialize dashboard data
+            loadDashboardData();
         }
         
-        // Logout function
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                // This would normally fetch real data from APIs
+                console.log('Loading admin dashboard data...');
+                
+                // You can add real API calls here
+                // const response = await window.authManager.makeAuthenticatedRequest('/api/admin/dashboard');
+                // if (response) {
+                //     const data = await response.json();
+                //     updateDashboard(data);
+                // }
+                
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+                showNotification('Failed to load dashboard data', 'error');
+            }
+        }
+        
+        // Logout function (now uses AuthManager)
         function logout() {
-            sessionStorage.removeItem('authToken');
-            sessionStorage.removeItem('user');
-            window.location.href = '/index.html';
+            window.authManager.logout();
+        }
+        
+        // User Management Functions
+        function showUserManagement() {
+            const modal = new bootstrap.Modal(document.getElementById('userManagementModal'));
+            modal.show();
+        }
+        
+        async function handleAddUser(event) {
+            event.preventDefault();
+            
+            const formData = {
+                username: document.getElementById('newUsername').value,
+                fullName: document.getElementById('newFullName').value,
+                email: document.getElementById('newEmail').value,
+                employeeId: document.getElementById('newEmployeeId').value,
+                phoneNumber: document.getElementById('newPhoneNumber').value,
+                password: document.getElementById('newPassword').value,
+                role: document.getElementById('newRole').value
+            };
+            
+            try {
+                const response = await window.authManager.makeAuthenticatedRequest('/api/auth/register', {
+                    method: 'POST',
+                    body: JSON.stringify(formData)
+                });
+                
+                if (response) {
+                    const result = await response.json();
+                    if (result.success) {
+                        showNotification('User created successfully!', 'success');
+                        document.getElementById('addUserForm').reset();
+                        // Refresh users table here
+                    } else {
+                        showNotification(result.message || 'Failed to create user', 'error');
+                    }
+                }
+            } catch (error) {
+                console.error('Error creating user:', error);
+                showNotification('Error creating user', 'error');
+            }
+        }
+        
+        // Emergency functions
+        function emergencyStop() {
+            if (confirm('Are you sure you want to issue a system-wide emergency stop?')) {
+                showNotification('Emergency stop activated!', 'warning');
+                // Add real emergency stop logic here
+            }
+        }
+        
+        function emergencyOverride() {
+            if (confirm('Override all current train schedules?')) {
+                showNotification('Emergency override activated!', 'warning');
+                // Add real override logic here
+            }
         }
         
         // Initialize when DOM loads
         document.addEventListener('DOMContentLoaded', function() {
             initTheme();
             checkAuth();
+            
+            // Setup form handler
+            document.getElementById('addUserForm').addEventListener('submit', handleAddUser);
         });
     </script>
 </body>
