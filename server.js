@@ -137,6 +137,7 @@ app.use('/api/trains', trainRoutes);
 app.use('/api/stations', stationRoutes);
 app.use('/api/routes', routeRoutes);
 app.use('/api/traffic-control', trafficControlRoutes);
+app.use('/api/staff', staffRoutes);
 
 // Intelligent Services API Routes
 app.get('/api/intelligent/system-status', (req, res) => {

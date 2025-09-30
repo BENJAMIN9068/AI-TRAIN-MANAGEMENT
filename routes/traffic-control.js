@@ -154,17 +154,62 @@ router.post('/scenario-analysis', authenticateToken, authorizeRoles('admin', 'st
     try {
         const { sectionId, scenarios } = req.body;
         
-        if (!sectionId || !scenarios || !Array.isArray(scenarios)) {
+        // Enhanced input validation
+        if (!sectionId || typeof sectionId !== 'string') {
             return res.status(400).json({
                 success: false,
-                message: 'Section ID and scenarios array are required'
+                message: 'Valid section ID is required',
+                details: 'sectionId must be a non-empty string'
             });
         }
         
-        console.log(`🔍 Scenario analysis requested for section ${sectionId} with ${scenarios.length} scenarios`);
+        if (!scenarios || !Array.isArray(scenarios) || scenarios.length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'Scenarios array is required and must contain at least one scenario',
+                details: 'scenarios must be a non-empty array'
+            });
+        }
         
-        // Run scenario analysis
-        const analysisResult = await trafficOptimizer.analyzeScenarios(sectionId, scenarios);
+        // Validate each scenario structure
+        for (let i = 0; i < scenarios.length; i++) {
+            const scenario = scenarios[i];
+            if (!scenario.id || !scenario.name || !scenario.type || !scenario.parameters) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Invalid scenario structure at index ${i}`,
+                    details: 'Each scenario must have id, name, type, and parameters fields'
+                });
+            }
+            
+            if (!scenario.parameters.affectedEntity || !scenario.parameters.duration) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Invalid scenario parameters at index ${i}`,
+                    details: 'Each scenario must have affectedEntity and duration in parameters'
+                });
+            }
+        }
+        
+        console.log(`🔍 Scenario analysis requested for section ${sectionId} with ${scenarios.length} scenarios by user ${req.user.username}`);
+        
+        // Initialize traffic optimizer if needed
+        if (!trafficOptimizer.sectionData.has(sectionId)) {
+            trafficOptimizer.registerSection({
+                id: sectionId,
+                name: `Section ${sectionId}`,
+                capacity: 100,
+                status: 'ACTIVE'
+            });
+        }
+        
+        // Run scenario analysis with timeout protection
+        const analysisPromise = trafficOptimizer.analyzeScenarios(sectionId, scenarios);
+        const timeoutPromise = new Promise((_, reject) => {
+            setTimeout(() => reject(new Error('Scenario analysis timeout')), 30000); // 30 second timeout
+        });
+        
+        const analysisResult = await Promise.race([analysisPromise, timeoutPromise]);
         
         // Store analysis results
         await storeScenarioAnalysis({
@@ -175,19 +220,53 @@ router.post('/scenario-analysis', authenticateToken, authorizeRoles('admin', 'st
             timestamp: new Date()
         });
         
+        // Log successful completion
+        console.log(`✅ Scenario analysis completed successfully for section ${sectionId}`);
+        
         res.json({
             success: true,
             message: 'Scenario analysis completed successfully',
-            data: analysisResult
+            data: analysisResult,
+            metadata: {
+                processedScenarios: scenarios.length,
+                sectionId,
+                requestedBy: req.user.username,
+                timestamp: new Date()
+            }
         });
         
     } catch (error) {
-        console.error('Scenario analysis error:', error);
-        res.status(500).json({
+        console.error('🚨 Scenario analysis error:', {
+            error: error.message,
+            stack: error.stack,
+            sectionId: req.body?.sectionId,
+            scenarioCount: req.body?.scenarios?.length || 0,
+            user: req.user?.username
+        });
+        
+        // Return detailed error information
+        const errorResponse = {
             success: false,
             message: 'Scenario analysis failed',
             error: error.message
-        });
+        };
+        
+        // Add specific error details based on error type
+        if (error.message.includes('timeout')) {
+            errorResponse.details = 'Analysis took too long to complete. Try reducing scenario complexity or contact support.';
+            errorResponse.errorCode = 'TIMEOUT';
+        } else if (error.message.includes('not found')) {
+            errorResponse.details = 'Section or train data not found. Verify the section ID and affected entities.';
+            errorResponse.errorCode = 'NOT_FOUND';
+        } else if (error.message.includes('validation')) {
+            errorResponse.details = 'Input validation failed. Check scenario parameters.';
+            errorResponse.errorCode = 'VALIDATION_ERROR';
+        } else {
+            errorResponse.details = 'An unexpected error occurred during scenario analysis.';
+            errorResponse.errorCode = 'INTERNAL_ERROR';
+        }
+        
+        res.status(500).json(errorResponse);
     }
 });
 

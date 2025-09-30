@@ -947,61 +947,216 @@
         }
         
         async function runScenarioAnalysis() {
+            const resultsContainer = document.getElementById('scenarioResults');
+            
             try {
                 const scenarioType = document.getElementById('scenarioType').value;
                 const affectedEntity = document.getElementById('affectedEntity').value;
                 const impactDuration = document.getElementById('impactDuration').value;
                 
+                // Input validation
+                if (!scenarioType || !affectedEntity || !impactDuration) {
+                    showNotification('Please fill in all scenario fields', 'error');
+                    return;
+                }
+                
+                if (parseInt(impactDuration) <= 0 || parseInt(impactDuration) > 300) {
+                    showNotification('Impact duration must be between 1 and 300 minutes', 'error');
+                    return;
+                }
+                
+                // Show loading state
+                resultsContainer.innerHTML = `
+                    <div class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Analyzing scenario...</span>
+                        </div>
+                        <div class="mt-2">🤖 AI analyzing scenario...</div>
+                        <small class="text-muted">This may take up to 30 seconds</small>
+                    </div>
+                `;
+                
                 const scenarios = [{
-                    id: 'SCENARIO_001',
+                    id: `SCENARIO_${Date.now()}`,
                     name: `${scenarioType} Analysis`,
                     description: `Impact on ${affectedEntity} for ${impactDuration} minutes`,
                     type: scenarioType,
                     parameters: {
-                        affectedEntity,
+                        affectedEntity: affectedEntity.trim(),
                         duration: parseInt(impactDuration)
                     }
                 }];
                 
+                console.log('🚀 Starting scenario analysis...', { scenarios, currentSection });
+                
                 const response = await window.authManager.makeAuthenticatedRequest('/api/traffic-control/scenario-analysis', {
                     method: 'POST',
                     body: JSON.stringify({
-                        sectionId: currentSection,
+                        sectionId: currentSection || 'SECT_001', // Default section
                         scenarios
-                    })
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
                 });
                 
-                if (response) {
+                if (response && response.ok) {
                     const result = await response.json();
-                    displayScenarioResults(result.data);
+                    
+                    if (result.success) {
+                        console.log('✅ Scenario analysis successful:', result);
+                        displayScenarioResults(result.data);
+                        showNotification('Scenario analysis completed successfully!', 'success');
+                    } else {
+                        throw new Error(result.message || 'Analysis failed');
+                    }
+                } else if (response) {
+                    const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
+                    throw new Error(errorData.message || `HTTP ${response.status}`);
+                } else {
+                    throw new Error('No response from server');
                 }
                 
             } catch (error) {
-                console.error('Scenario analysis error:', error);
-                showNotification('Scenario analysis failed', 'error');
+                console.error('🚨 Scenario analysis error:', error);
+                
+                // Display user-friendly error message
+                let errorMessage = 'Scenario analysis failed';
+                let errorDetails = '';
+                
+                if (error.message.includes('timeout')) {
+                    errorMessage = 'Analysis Timeout';
+                    errorDetails = 'The scenario analysis took too long. Try simplifying the scenario or try again later.';
+                } else if (error.message.includes('validation')) {
+                    errorMessage = 'Invalid Input';
+                    errorDetails = 'Please check your input values and try again.';
+                } else if (error.message.includes('not found')) {
+                    errorMessage = 'Data Not Found';
+                    errorDetails = 'The specified train or section could not be found.';
+                } else if (error.message.includes('unauthorized')) {
+                    errorMessage = 'Access Denied';
+                    errorDetails = 'You do not have permission to perform scenario analysis.';
+                } else {
+                    errorDetails = error.message;
+                }
+                
+                resultsContainer.innerHTML = `
+                    <div class="alert alert-danger">
+                        <h6><i class="fas fa-exclamation-triangle"></i> ${errorMessage}</h6>
+                        <p class="mb-2">${errorDetails}</p>
+                        <small class="text-muted">
+                            <strong>Troubleshooting:</strong><br>
+                            • Verify the train number exists (e.g., "17239", "12615")<br>
+                            • Check impact duration is reasonable (5-60 minutes)<br>
+                            • Ensure you have proper access permissions<br>
+                            • Try refreshing the page if the issue persists
+                        </small>
+                    </div>
+                `;
+                
+                showNotification(errorMessage, 'error');
             }
         }
         
         function displayScenarioResults(results) {
             const container = document.getElementById('scenarioResults');
-            const scenario = results.scenarios[0];
             
-            if (scenario.error) {
-                container.innerHTML = `<div class="alert alert-danger">${scenario.error}</div>`;
+            if (!results || !results.scenarios || results.scenarios.length === 0) {
+                container.innerHTML = `
+                    <div class="alert alert-warning">
+                        <h6>No Results</h6>
+                        <p>No scenario analysis results were returned. Please try again.</p>
+                    </div>
+                `;
                 return;
             }
             
+            const scenario = results.scenarios[0];
+            
+            if (scenario.error) {
+                container.innerHTML = `
+                    <div class="alert alert-danger">
+                        <h6><i class="fas fa-exclamation-triangle"></i> Analysis Error</h6>
+                        <p>${scenario.error}</p>
+                        <small class="text-muted">Feasibility: ${scenario.feasibility || 'UNKNOWN'}</small>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Determine alert class based on impact severity
+            let alertClass = 'alert-success';
+            let riskIcon = '🟢'; // Green circle
+            let riskLevel = 'LOW RISK';
+            
+            if (scenario.impact?.delayIncrease > 15) {
+                alertClass = 'alert-danger';
+                riskIcon = '🔴'; // Red circle
+                riskLevel = 'HIGH RISK';
+            } else if (scenario.impact?.delayIncrease > 5) {
+                alertClass = 'alert-warning';
+                riskIcon = '🟡'; // Yellow circle
+                riskLevel = 'MEDIUM RISK';
+            }
+            
+            // Format the results with enhanced AI analysis
             container.innerHTML = `
-                <div class="alert alert-success">
-                    <h6>Scenario: ${scenario.name}</h6>
-                    <p>Feasibility: <strong>${scenario.feasibility}</strong></p>
-                    <p>Impact Analysis:</p>
-                    <ul>
-                        <li>Expected delay increase: ${scenario.impact?.delayIncrease || 'N/A'} minutes</li>
-                        <li>Affected trains: ${scenario.impact?.affectedTrains || 'N/A'}</li>
-                        <li>Recovery time: ${scenario.impact?.recoveryTime || 'N/A'} minutes</li>
-                    </ul>
-                    <p><strong>Recommendation:</strong> ${scenario.recommendation || 'Analysis complete'}</p>
+                <div class="alert ${alertClass} border-0 shadow-sm">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h6 class="mb-0">
+                            <i class="fas fa-robot me-2"></i>AI Scenario Analysis: ${scenario.name}
+                        </h6>
+                        <span class="badge bg-primary">${scenario.feasibility}</span>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-2">Impact Assessment ${riskIcon}</h6>
+                            <ul class="list-unstyled mb-3">
+                                <li><strong>Risk Level:</strong> <span class="fw-bold">${riskLevel}</span></li>
+                                <li><strong>Delay Increase:</strong> ${scenario.impact?.delayIncrease || 0} minutes</li>
+                                <li><strong>Affected Trains:</strong> ${scenario.impact?.affectedTrains || 0}</li>
+                                <li><strong>Recovery Time:</strong> ${scenario.impact?.recoveryTime || 0} minutes</li>
+                                <li><strong>Throughput Change:</strong> ${scenario.impact?.throughputChange?.toFixed(1) || '0.0'}%</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-2">Operational Impact</h6>
+                            <ul class="list-unstyled mb-3">
+                                <li><strong>Safety Risk:</strong> ${scenario.impact?.safetyRisk || 'LOW'}</li>
+                                <li><strong>Complexity:</strong> ${scenario.impact?.operationalComplexity || 'MEDIUM'}</li>
+                                <li><strong>Passenger Impact:</strong> ${scenario.impact?.passengerImpact || 'MINIMAL'}</li>
+                                <li><strong>Resource Utilization:</strong> ${scenario.impact?.resourceUtilization || 0}%</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="border-top pt-3">
+                        <h6 class="text-muted mb-2">💡 AI Recommendations</h6>
+                        <div class="bg-light p-3 rounded">
+                            <p class="mb-0">${scenario.recommendation || 'Standard operational procedures should be sufficient for this scenario.'}</p>
+                        </div>
+                    </div>
+                    
+                    ${results.recommendations && results.recommendations.length > 0 ? `
+                        <div class="mt-3 pt-3 border-top">
+                            <h6 class="text-muted mb-2">System-Wide Recommendations</h6>
+                            ${results.recommendations.map(rec => `
+                                <div class="mb-2">
+                                    <span class="badge bg-${rec.priority === 'HIGH' ? 'danger' : rec.priority === 'MEDIUM' ? 'warning' : 'info'} me-2">${rec.priority}</span>
+                                    <strong>${rec.type}:</strong> ${rec.message}
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                    
+                    <div class="mt-3 pt-3 border-top">
+                        <small class="text-muted">
+                            <i class="fas fa-clock me-1"></i>Analysis completed at ${new Date().toLocaleTimeString()}
+                            ${results.metadata ? ` | Processed by ${results.metadata.requestedBy}` : ''}
+                        </small>
+                    </div>
                 </div>
             `;
         }

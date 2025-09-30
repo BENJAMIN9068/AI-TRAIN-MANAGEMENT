@@ -449,6 +449,286 @@ class AITrafficOptimizer {
     // Additional helper methods would be implemented here...
     
     /**
+     * Scenario Modification Methods
+     */
+    
+    applyScenarioModifications(sectionId, scenario) {
+        console.log(`🔧 Applying scenario modifications: ${scenario.type}`);
+        
+        // Store original state for restoration
+        if (!this.originalStates) {
+            this.originalStates = new Map();
+        }
+        
+        const originalState = {
+            sectionData: this.sectionData.get(sectionId),
+            activeTrains: new Map(this.activeTrains),
+            sectionCapacities: this.sectionCapacities.get(sectionId)
+        };
+        
+        this.originalStates.set(`${sectionId}_${scenario.id}`, originalState);
+        
+        // Apply modifications based on scenario type
+        switch (scenario.type) {
+            case 'Train Delay Scenario':
+                this.applyDelayScenario(sectionId, scenario);
+                break;
+            case 'Track Blockage':
+                this.applyBlockageScenario(sectionId, scenario);
+                break;
+            case 'Weather Impact':
+                this.applyWeatherScenario(sectionId, scenario);
+                break;
+            case 'Emergency Priority':
+                this.applyEmergencyScenario(sectionId, scenario);
+                break;
+            default:
+                console.warn(`Unknown scenario type: ${scenario.type}`);
+        }
+    }
+    
+    applyDelayScenario(sectionId, scenario) {
+        const { affectedEntity, duration } = scenario.parameters;
+        
+        // Find and modify the affected train
+        for (const [trainId, trainData] of this.activeTrains) {
+            if (trainId === affectedEntity || trainData.trainNumber === affectedEntity) {
+                trainData.simulatedDelay = (trainData.simulatedDelay || 0) + duration;
+                trainData.scenarioAffected = true;
+                console.log(`Applied ${duration}min delay to train ${trainId}`);
+                break;
+            }
+        }
+    }
+    
+    applyBlockageScenario(sectionId, scenario) {
+        const { affectedEntity, duration } = scenario.parameters;
+        
+        // Reduce section capacity temporarily
+        const currentCapacity = this.sectionCapacities.get(sectionId) || 100;
+        this.sectionCapacities.set(sectionId, Math.max(20, currentCapacity * 0.5));
+        
+        console.log(`Applied track blockage reducing capacity by 50% for ${duration} minutes`);
+    }
+    
+    applyWeatherScenario(sectionId, scenario) {
+        const { duration } = scenario.parameters;
+        
+        // Apply speed restrictions to all trains in section
+        for (const [trainId, trainData] of this.activeTrains) {
+            if (trainData.currentSection === sectionId) {
+                trainData.maxSpeed = Math.min(trainData.maxSpeed || 120, 60); // Reduce to 60 km/h
+                trainData.weatherAffected = true;
+            }
+        }
+        
+        console.log(`Applied weather impact with speed restrictions for ${duration} minutes`);
+    }
+    
+    applyEmergencyScenario(sectionId, scenario) {
+        const { affectedEntity } = scenario.parameters;
+        
+        // Boost priority for emergency train
+        for (const [trainId, trainData] of this.activeTrains) {
+            if (trainId === affectedEntity || trainData.trainNumber === affectedEntity) {
+                trainData.originalPriority = trainData.priority;
+                trainData.priority = 10; // Maximum emergency priority
+                trainData.emergencyMode = true;
+                break;
+            }
+        }
+    }
+    
+    calculateScenarioImpact(baselineResult, scenarioResult) {
+        console.log('📊 Calculating scenario impact analysis');
+        
+        const impact = {
+            delayIncrease: 0,
+            affectedTrains: 0,
+            recoveryTime: 0,
+            throughputChange: 0,
+            safetyRisk: 'LOW',
+            operationalComplexity: 'MEDIUM',
+            resourceUtilization: 0,
+            passengerImpact: 'MINIMAL'
+        };
+        
+        // Calculate delay impact
+        const baselineDelay = baselineResult?.performance?.avgDelay || 0;
+        const scenarioDelay = scenarioResult?.performance?.avgDelay || 0;
+        impact.delayIncrease = Math.max(0, scenarioDelay - baselineDelay);
+        
+        // Calculate affected trains
+        const baselineThroughput = baselineResult?.performance?.throughput || 0;
+        const scenarioThroughput = scenarioResult?.performance?.throughput || 0;
+        impact.affectedTrains = Math.abs(baselineThroughput - scenarioThroughput);
+        
+        // Estimate recovery time based on delay magnitude
+        if (impact.delayIncrease < 5) {
+            impact.recoveryTime = impact.delayIncrease * 2;
+        } else if (impact.delayIncrease < 15) {
+            impact.recoveryTime = impact.delayIncrease * 1.5;
+        } else {
+            impact.recoveryTime = impact.delayIncrease * 1.2;
+        }
+        
+        // Assess throughput change
+        impact.throughputChange = ((scenarioThroughput - baselineThroughput) / Math.max(baselineThroughput, 1)) * 100;
+        
+        // Risk assessment
+        if (impact.delayIncrease > 20 || impact.affectedTrains > 5) {
+            impact.safetyRisk = 'HIGH';
+            impact.operationalComplexity = 'HIGH';
+            impact.passengerImpact = 'SIGNIFICANT';
+        } else if (impact.delayIncrease > 10 || impact.affectedTrains > 2) {
+            impact.safetyRisk = 'MEDIUM';
+            impact.operationalComplexity = 'MEDIUM';
+            impact.passengerImpact = 'MODERATE';
+        }
+        
+        // Resource utilization impact
+        impact.resourceUtilization = Math.min(100, (impact.affectedTrains / 10) * 100);
+        
+        return impact;
+    }
+    
+    generateScenarioRecommendation(impact) {
+        console.log('💡 Generating AI-powered scenario recommendations');
+        
+        const recommendations = [];
+        
+        // High-impact scenario recommendations
+        if (impact.delayIncrease > 15) {
+            recommendations.push(
+                'CRITICAL: Implement emergency protocols',
+                'Consider alternative routing for affected trains',
+                'Activate backup resources and staff'
+            );
+        } else if (impact.delayIncrease > 5) {
+            recommendations.push(
+                'MODERATE: Monitor situation closely',
+                'Prepare contingency measures',
+                'Inform passengers of potential delays'
+            );
+        } else {
+            recommendations.push(
+                'LOW IMPACT: Standard monitoring sufficient',
+                'Maintain current operations'
+            );
+        }
+        
+        // Specific recommendations based on affected trains
+        if (impact.affectedTrains > 3) {
+            recommendations.push(
+                'Coordinate with adjacent sections for traffic management',
+                'Consider temporary schedule adjustments'
+            );
+        }
+        
+        // Recovery recommendations
+        if (impact.recoveryTime > 30) {
+            recommendations.push(
+                'Plan extended recovery period',
+                'Communicate delays to connecting services'
+            );
+        }
+        
+        return recommendations.join('; ');
+    }
+    
+    restoreOriginalConditions(sectionId, scenario) {
+        console.log(`🔄 Restoring original conditions for scenario ${scenario.id}`);
+        
+        const stateKey = `${sectionId}_${scenario.id}`;
+        const originalState = this.originalStates?.get(stateKey);
+        
+        if (originalState) {
+            // Restore section data
+            if (originalState.sectionData) {
+                this.sectionData.set(sectionId, originalState.sectionData);
+            }
+            
+            // Restore section capacity
+            if (originalState.sectionCapacities) {
+                this.sectionCapacities.set(sectionId, originalState.sectionCapacities);
+            }
+            
+            // Restore train states
+            for (const [trainId, trainData] of this.activeTrains) {
+                // Remove scenario-specific modifications
+                delete trainData.simulatedDelay;
+                delete trainData.scenarioAffected;
+                delete trainData.weatherAffected;
+                delete trainData.emergencyMode;
+                
+                if (trainData.originalPriority !== undefined) {
+                    trainData.priority = trainData.originalPriority;
+                    delete trainData.originalPriority;
+                }
+                
+                // Restore original max speed
+                if (trainData.weatherAffected) {
+                    trainData.maxSpeed = 120; // Default restoration
+                }
+            }
+            
+            // Clean up stored state
+            this.originalStates.delete(stateKey);
+            console.log(`✅ Restored original conditions for ${stateKey}`);
+        } else {
+            console.warn(`⚠️ No original state found for ${stateKey}`);
+        }
+    }
+    
+    generateOverallRecommendations(scenarioResults) {
+        const recommendations = [];
+        const criticalScenarios = scenarioResults.filter(s => s.impact?.delayIncrease > 15).length;
+        const moderateScenarios = scenarioResults.filter(s => s.impact?.delayIncrease > 5 && s.impact?.delayIncrease <= 15).length;
+        
+        if (criticalScenarios > 0) {
+            recommendations.push({
+                type: 'CRITICAL_PREPAREDNESS',
+                priority: 'HIGH',
+                message: `${criticalScenarios} scenario(s) pose critical risks`,
+                actions: ['Review emergency protocols', 'Train additional staff', 'Enhance monitoring systems']
+            });
+        }
+        
+        if (moderateScenarios > 1) {
+            recommendations.push({
+                type: 'OPERATIONAL_RESILIENCE',
+                priority: 'MEDIUM',
+                message: `${moderateScenarios} scenarios require enhanced resilience`,
+                actions: ['Develop contingency plans', 'Improve communication systems']
+            });
+        }
+        
+        recommendations.push({
+            type: 'CONTINUOUS_IMPROVEMENT',
+            priority: 'LOW',
+            message: 'Regular scenario analysis recommended',
+            actions: ['Schedule monthly what-if analyses', 'Update response protocols']
+        });
+        
+        return recommendations;
+    }
+    
+    identifyBestScenario(scenarioResults) {
+        const validScenarios = scenarioResults.filter(s => s.feasibility !== 'IMPOSSIBLE' && !s.error);
+        
+        if (validScenarios.length === 0) {
+            return null;
+        }
+        
+        // Find scenario with minimal impact
+        return validScenarios.reduce((best, current) => {
+            const bestImpact = best.impact?.delayIncrease || Infinity;
+            const currentImpact = current.impact?.delayIncrease || Infinity;
+            return currentImpact < bestImpact ? current : best;
+        });
+    }
+    
+    /**
      * Public API Methods
      */
     
