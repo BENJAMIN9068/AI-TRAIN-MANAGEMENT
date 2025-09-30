@@ -1,35 +1,49 @@
 /* IRTOMS Railway Management System - Main Stylesheet */
 
-/* Custom Properties */
+/* Ultra-Realistic Railway Theme */
 :root {
-    --primary-color: #007bff;
-    --secondary-color: #6c757d;
-    --success-color: #28a745;
-    --danger-color: #dc3545;
-    --warning-color: #ffc107;
-    --info-color: #17a2b8;
+    /* Core Railway Colors */
+    --primary-color: #1e3c72;
+    --secondary-color: #2a5298;
+    --accent-color: #ff6b35;
+    --success-color: #00c851;
+    --danger-color: #ff3547;
+    --warning-color: #ffbb33;
+    --info-color: #33b5e5;
     --light-color: #f8f9fa;
-    --dark-color: #343a40;
+    --dark-color: #2c3e50;
     
-    /* Train Priority Colors */
-    --vip-color: #dc3545;        /* Red */
-    --superfast-color: #fd7e14;  /* Orange */
-    --express-color: #007bff;    /* Blue */
-    --passenger-color: #28a745;  /* Green */
-    --freight-color: #6c757d;    /* Gray */
+    /* Indian Railway Theme */
+    --railway-blue: #1e3c72;
+    --railway-orange: #ff6b35;
+    --steel-gray: #5a6c7d;
+    --track-brown: #8b4513;
+    --station-yellow: #ffd700;
     
-    --box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.15);
-    --border-radius: 0.5rem;
-    --card-border-radius: 0.75rem;
+    /* Advanced Shadows & Effects */
+    --shadow-soft: 0 2px 15px rgba(0, 0, 0, 0.08);
+    --shadow-medium: 0 5px 25px rgba(0, 0, 0, 0.15);
+    --shadow-strong: 0 10px 40px rgba(0, 0, 0, 0.25);
+    --border-radius: 12px;
+    --card-border-radius: 16px;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    --gradient-accent: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+    --gradient-success: linear-gradient(135deg, #00c851 0%, #007e33 100%);
+    --gradient-surface: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
 }
 
-/* Global Styles */
+/* Global Styles with Ultra-Realistic Effects */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     line-height: 1.6;
-    color: #333;
-    background-color: #f8f9fa;
+    color: var(--dark-color);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
     padding-top: 0;
+    overflow-x: hidden;
 }
 
 .container-fluid {
@@ -44,48 +58,136 @@ body {
     margin: 0 auto;
 }
 
-/* Navigation Enhancements */
+/* Ultra-Modern Navigation */
 .navbar {
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    background: linear-gradient(135deg, #343a40 0%, #495057 100%) !important;
+    background: rgba(30, 60, 114, 0.95) !important;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    box-shadow: var(--shadow-medium);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .navbar-brand {
-    font-weight: 700;
-    font-size: 1.5rem;
+    font-weight: 800;
+    font-size: 1.6rem;
     color: white !important;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navbar-brand:hover {
+    transform: scale(1.05);
 }
 
 .navbar-brand i {
     margin-right: 0.5rem;
-    color: #ffc107;
-    font-size: 1.3rem;
+    color: var(--railway-orange);
+    font-size: 1.4rem;
+    filter: drop-shadow(0 2px 4px rgba(255, 107, 53, 0.3));
+    animation: pulse-glow 2s infinite;
+}
+
+@keyframes pulse-glow {
+    0%, 100% { filter: drop-shadow(0 2px 4px rgba(255, 107, 53, 0.3)); }
+    50% { filter: drop-shadow(0 2px 8px rgba(255, 107, 53, 0.6)); }
 }
 
 .navbar-nav .nav-link {
-    color: rgba(255,255,255,0.9) !important;
-    font-weight: 500;
-    transition: color 0.3s ease;
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-weight: 600;
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0.75rem 1rem !important;
 }
 
 .navbar-nav .nav-link:hover {
-    color: #ffc107 !important;
+    color: var(--railway-orange) !important;
+    transform: translateY(-2px);
 }
 
-/* Card Enhancements */
+.navbar-nav .nav-link::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 3px;
+    background: var(--gradient-accent);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateX(-50%);
+    border-radius: 2px;
+}
+
+.navbar-nav .nav-link:hover::before {
+    width: 80%;
+}
+
+/* Ultra-Realistic Card System */
 .card {
-    box-shadow: var(--box-shadow);
-    border: none;
+    background: var(--gradient-surface);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: var(--card-border-radius);
-    transition: all 0.3s ease;
-    background: white;
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.15);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-strong);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.card:hover::before {
+    opacity: 1;
+}
+
+.feature-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(from 0deg at 50% 50%, 
+        transparent 0deg, 
+        rgba(255, 107, 53, 0.1) 180deg, 
+        transparent 360deg);
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    pointer-events: none;
+    animation: rotate-gradient 6s linear infinite;
+}
+
+.feature-card:hover::after {
+    opacity: 1;
+}
+
+@keyframes rotate-gradient {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 .card-header {
@@ -251,14 +353,75 @@ body {
     margin-bottom: 0;
 }
 
-/* Train Map Container */
-.train-map {
-    height: 500px;
-    background: #f8f9fa;
-    border: 2px solid #dee2e6;
-    border-radius: var(--border-radius);
+/* Railway Map Container - Ultra-Realistic */
+.railway-map-container {
+    height: 600px;
     position: relative;
+    border-radius: var(--card-border-radius);
     overflow: hidden;
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+#railwayMap {
+    height: 100%;
+    width: 100%;
+    border-radius: var(--card-border-radius);
+    position: relative;
+    z-index: 1;
+}
+
+/* Map Legend Styling */
+.map-legend {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(30, 60, 114, 0.95);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    color: white;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-medium);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 1000;
+    min-width: 180px;
+}
+
+.map-legend h6 {
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+    color: white;
+    font-size: 0.9rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    margin-right: 0.75rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.legend-color.train {
+    background: var(--railway-orange);
+    box-shadow: 0 0 8px rgba(255, 107, 53, 0.4);
+}
+
+.legend-color.station {
+    background: var(--station-yellow);
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+}
+
+.legend-color.track {
+    background: var(--steel-gray);
+    border-radius: 2px;
 }
 
 .train-marker {
@@ -338,11 +501,93 @@ body {
     100% { transform: scale(1); }
 }
 
-/* Button Enhancements */
+/* Ultra-Realistic Button System */
 .btn {
-    font-weight: 500;
+    font-weight: 600;
     border-radius: var(--border-radius);
-    transition: all 0.3s ease;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.9rem;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s ease;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn-primary {
+    background: var(--gradient-primary);
+    box-shadow: 0 4px 15px rgba(30, 60, 114, 0.3);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(30, 60, 114, 0.4);
+    background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
+}
+
+.btn-outline-primary {
+    background: transparent;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    backdrop-filter: blur(10px);
+}
+
+.btn-outline-primary:hover {
+    background: var(--gradient-primary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(30, 60, 114, 0.3);
+}
+
+.btn-outline-secondary {
+    background: transparent;
+    border: 2px solid var(--steel-gray);
+    color: var(--steel-gray);
+    backdrop-filter: blur(10px);
+}
+
+.btn-outline-secondary:hover {
+    background: var(--steel-gray);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(90, 108, 125, 0.3);
+}
+
+/* Map Control Buttons */
+.map-controls .btn {
+    margin-left: 0.5rem;
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+}
+
+.btn-light {
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--dark-color);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(20px);
+}
+
+.btn-light:hover {
+    background: white;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
 .btn-emergency {

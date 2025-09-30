@@ -118,40 +118,40 @@
         <!-- Features Section -->
         <div class="row mt-5">
             <div class="col-12">
-                <h2 class="text-center mb-4">System Features</h2>
+                <h2 class="text-center mb-4">Indian Railway Management Features</h2>
             </div>
             <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card h-100">
+                <div class="card h-100 feature-card">
                     <div class="card-body text-center">
-                        <i class="fas fa-trophy fa-3x text-warning mb-3"></i>
-                        <h5 class="card-title">Priority-Based System</h5>
+                        <i class="fas fa-map-marked-alt fa-3x mb-3" style="color: var(--railway-orange);"></i>
+                        <h5 class="card-title">Live Indian Railway Map</h5>
                         <p class="card-text">
-                            VIP trains (Vande Bharat, Rajdhani) get highest priority with zero halts, 
-                            followed by Superfast, Express, Passenger, and Freight trains.
+                            Interactive map focused exclusively on Indian Railway network 
+                            with real-time train tracking and station information.
                         </p>
                     </div>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card h-100">
+                <div class="card h-100 feature-card">
                     <div class="card-body text-center">
-                        <i class="fas fa-map fa-3x text-success mb-3"></i>
-                        <h5 class="card-title">Real-Time Visualization</h5>
+                        <i class="fas fa-route fa-3x mb-3" style="color: var(--success-color);"></i>
+                        <h5 class="card-title">Route Management</h5>
                         <p class="card-text">
-                            Interactive railway network map with live train movements, 
-                            color-coded by priority, and real-time position tracking.
+                            Comprehensive route planning and management system for 
+                            efficient train operations across the Indian railway network.
                         </p>
                     </div>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card h-100">
+                <div class="card h-100 feature-card">
                     <div class="card-body text-center">
-                        <i class="fas fa-brain fa-3x text-info mb-3"></i>
-                        <h5 class="card-title">Intelligent Scheduling</h5>
+                        <i class="fas fa-cogs fa-3x mb-3" style="color: var(--info-color);"></i>
+                        <h5 class="card-title">Smart Operations</h5>
                         <p class="card-text">
-                            Automatic route planning, conflict resolution, and optimal 
-                            halt allocation based on train priorities and track availability.
+                            Advanced operational management with real-time monitoring, 
+                            automated scheduling, and intelligent traffic coordination.
                         </p>
                     </div>
                 </div>
@@ -181,30 +181,18 @@
                             
                             <!-- Map Legend -->
                             <div class="map-legend">
-                                <h6><i class="fas fa-info-circle"></i> Legend</h6>
+                                <h6><i class="fas fa-info-circle"></i> Map Elements</h6>
                                 <div class="legend-item">
-                                    <div class="legend-color vip"></div>
-                                    <span>VIP Trains</span>
-                                </div>
-                                <div class="legend-item">
-                                    <div class="legend-color superfast"></div>
-                                    <span>Superfast Express</span>
-                                </div>
-                                <div class="legend-item">
-                                    <div class="legend-color express"></div>
-                                    <span>Express Trains</span>
-                                </div>
-                                <div class="legend-item">
-                                    <div class="legend-color passenger"></div>
-                                    <span>Passenger</span>
-                                </div>
-                                <div class="legend-item">
-                                    <div class="legend-color freight"></div>
-                                    <span>Freight</span>
+                                    <div class="legend-color train"></div>
+                                    <span>Running Trains</span>
                                 </div>
                                 <div class="legend-item">
                                     <div class="legend-color station"></div>
-                                    <span>Stations</span>
+                                    <span>Railway Stations</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color track"></div>
+                                    <span>Railway Tracks</span>
                                 </div>
                             </div>
                         </div>
@@ -246,52 +234,6 @@
             </div>
         </div>
 
-        <!-- Train Priority Legend -->
-        <div class="row mt-5">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">
-                            <i class="fas fa-list"></i> Train Priority System
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-2 mb-2">
-                                <span class="badge bg-danger p-2 w-100">
-                                    <i class="fas fa-star"></i> VIP Trains
-                                </span>
-                                <small class="text-muted d-block">Zero halts, No delays</small>
-                            </div>
-                            <div class="col-md-2 mb-2">
-                                <span class="badge bg-warning p-2 w-100">
-                                    <i class="fas fa-rocket"></i> Superfast
-                                </span>
-                                <small class="text-muted d-block">3-4 halts, 10-15 min delay</small>
-                            </div>
-                            <div class="col-md-2 mb-2">
-                                <span class="badge bg-primary p-2 w-100">
-                                    <i class="fas fa-train"></i> Express
-                                </span>
-                                <small class="text-muted d-block">4-5 halts, 20-25 min delay</small>
-                            </div>
-                            <div class="col-md-2 mb-2">
-                                <span class="badge bg-success p-2 w-100">
-                                    <i class="fas fa-users"></i> Passenger
-                                </span>
-                                <small class="text-muted d-block">10-15 halts, 1-2 hrs delay</small>
-                            </div>
-                            <div class="col-md-2 mb-2">
-                                <span class="badge bg-secondary p-2 w-100">
-                                    <i class="fas fa-boxes"></i> Freight
-                                </span>
-                                <small class="text-muted d-block">Unlimited halts</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- Login Modal -->
@@ -481,28 +423,28 @@
             
             const demoTrains = [
                 {
-                    id: 'T1', number: '12951', name: 'Mumbai Rajdhani Express', type: 'VIP',
+                    id: 'T1', number: '12951', name: 'Mumbai Rajdhani Express',
                     position: { lat: 19.0760, lng: 72.8777 }, status: 'RUNNING', speed: 130
                 },
                 {
-                    id: 'T2', number: '20001', name: 'Vande Bharat Express', type: 'VIP',
+                    id: 'T2', number: '20001', name: 'Vande Bharat Express',
                     position: { lat: 28.6139, lng: 77.2090 }, status: 'RUNNING', speed: 160
                 },
                 {
-                    id: 'T3', number: '12345', name: 'Howrah Superfast', type: 'SUPERFAST_EXPRESS',
+                    id: 'T3', number: '12345', name: 'Howrah Superfast',
                     position: { lat: 22.5726, lng: 88.3639 }, status: 'RUNNING', speed: 120
                 },
                 {
-                    id: 'T4', number: '12622', name: 'Chennai Express', type: 'EXPRESS',
+                    id: 'T4', number: '12622', name: 'Chennai Express',
                     position: { lat: 13.0827, lng: 80.2707 }, status: 'RUNNING', speed: 100
                 },
                 {
-                    id: 'T5', number: '56789', name: 'Bangalore Passenger', type: 'PASSENGER',
+                    id: 'T5', number: '56789', name: 'Bangalore Passenger',
                     position: { lat: 12.9716, lng: 77.5946 }, status: 'RUNNING', speed: 60
                 },
                 {
-                    id: 'T6', number: '98765', name: 'Freight Express', type: 'FREIGHT',
-                    position: { lat: 21.1458, lng: 79.0882 }, status: 'RUNNING', speed: 45
+                    id: 'T6', number: '98765', name: 'Delhi-Kolkata Express',
+                    position: { lat: 21.1458, lng: 79.0882 }, status: 'RUNNING', speed: 85
                 }
             ];
             

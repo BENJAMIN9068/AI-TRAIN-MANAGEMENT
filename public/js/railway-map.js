@@ -10,12 +10,20 @@ class IRTOMSRailwayMap {
         this.stations = new Map();
         this.railwayLines = [];
         
-        // Default options
+        // India-focused options with bounds restriction
         this.options = {
             center: [20.5937, 78.9629], // Center of India
             zoom: 5,
+            minZoom: 4,
+            maxZoom: 18,
             showControls: true,
             enableRealTime: true,
+            // Restrict map to Indian boundaries
+            maxBounds: [
+                [6.0, 68.0],  // Southwest coordinates (southern tip, western border)
+                [37.0, 98.0]  // Northeast coordinates (northern border, eastern border)
+            ],
+            maxBoundsViscosity: 1.0, // Prevents panning outside bounds
             ...options
         };
         
@@ -31,8 +39,15 @@ class IRTOMSRailwayMap {
             return;
         }
         
-        // Create Leaflet map
-        this.map = L.map(this.containerId).setView(this.options.center, this.options.zoom);
+        // Create Leaflet map with Indian bounds restriction
+        this.map = L.map(this.containerId, {
+            center: this.options.center,
+            zoom: this.options.zoom,
+            minZoom: this.options.minZoom,
+            maxZoom: this.options.maxZoom,
+            maxBounds: this.options.maxBounds,
+            maxBoundsViscosity: this.options.maxBoundsViscosity
+        });
         
         // Add base map layer
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -103,39 +118,13 @@ class IRTOMSRailwayMap {
             iconAnchor: [6, 6]
         });
         
-        // Train icons based on priority
-        this.trainIcons = {
-            VIP: L.divIcon({
-                className: 'train-marker-icon vip',
-                html: '<div class="train-marker vip"><i class="fas fa-train"></i></div>',
-                iconSize: [24, 24],
-                iconAnchor: [12, 12]
-            }),
-            SUPERFAST_EXPRESS: L.divIcon({
-                className: 'train-marker-icon superfast',
-                html: '<div class="train-marker superfast"><i class="fas fa-train"></i></div>',
-                iconSize: [22, 22],
-                iconAnchor: [11, 11]
-            }),
-            EXPRESS: L.divIcon({
-                className: 'train-marker-icon express',
-                html: '<div class="train-marker express"><i class="fas fa-train"></i></div>',
-                iconSize: [20, 20],
-                iconAnchor: [10, 10]
-            }),
-            PASSENGER: L.divIcon({
-                className: 'train-marker-icon passenger',
-                html: '<div class="train-marker passenger"><i class="fas fa-train"></i></div>',
-                iconSize: [18, 18],
-                iconAnchor: [9, 9]
-            }),
-            FREIGHT: L.divIcon({
-                className: 'train-marker-icon freight',
-                html: '<div class="train-marker freight"><i class="fas fa-train"></i></div>',
-                iconSize: [16, 16],
-                iconAnchor: [8, 8]
-            })
-        };
+        // Simplified train icon (no categories)
+        this.trainIcon = L.divIcon({
+            className: 'train-marker-icon',
+            html: '<div class="train-marker"><i class="fas fa-train"></i></div>',
+            iconSize: [24, 24],
+            iconAnchor: [12, 12]
+        });
     }
     
     /**
@@ -219,33 +208,30 @@ class IRTOMSRailwayMap {
     }
     
     /**
-     * Add a train to the map
+     * Add a train to the map (simplified without categories)
      */
     addTrain(trainData) {
-        const { id, number, name, type, position, status, speed = 0 } = trainData;
+        const { id, number, name, position, status = 'RUNNING', speed = 0 } = trainData;
         
         if (!position || !position.lat || !position.lng) {
             console.warn('Invalid train position data:', trainData);
             return;
         }
         
-        const icon = this.trainIcons[type] || this.trainIcons.EXPRESS;
-        const marker = L.marker([position.lat, position.lng], { icon });
+        const marker = L.marker([position.lat, position.lng], { icon: this.trainIcon });
         
         const statusColor = this.getStatusColor(status);
-        const priorityClass = type.toLowerCase().replace('_', '-');
         
         const popupContent = `
             <div class="train-popup">
-                <div class="train-header ${priorityClass}">
+                <div class="train-header">
                     <h6><strong>${name}</strong></h6>
                     <span class="train-number">${number}</span>
                 </div>
                 <div class="train-details">
-                    <p><strong>Type:</strong> <span class="badge badge-${priorityClass}">${type.replace('_', ' ')}</span></p>
                     <p><strong>Status:</strong> <span class="status-${status.toLowerCase()}" style="color: ${statusColor}">${status}</span></p>
                     <p><strong>Speed:</strong> ${speed} km/h</p>
-                    <p><strong>Position:</strong> ${position.lat.toFixed(4)}, ${position.lng.toFixed(4)}</p>
+                    <p><strong>Location:</strong> ${position.lat.toFixed(4)}, ${position.lng.toFixed(4)}</p>
                 </div>
                 <div class="train-actions">
                     <small><em>Last updated: ${new Date().toLocaleTimeString()}</em></small>
